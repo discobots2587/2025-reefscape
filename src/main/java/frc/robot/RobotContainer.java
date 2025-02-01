@@ -15,6 +15,8 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ElevatorSubsystemconstant;
@@ -29,6 +31,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -42,7 +47,10 @@ public class RobotContainer {
   // The driver's controller
 XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
   private final JoystickButton resetheading = new JoystickButton(m_driveController, XboxController.Button.kB.value);
-  private final JoystickButton Elevatorcontrol = new JoystickButton(m_driveController, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton Elevatorcontrol = new JoystickButton(m_driveController, XboxController.Button.kX.value);
+  private final JoystickButton Elevatorcontrol2 =  new JoystickButton(m_driveController, XboxController.Button.kY.value);
+  // Auto chooser
+  private SendableChooser<Command> autoChooser;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -62,6 +70,15 @@ XboxController m_driveController = new XboxController(OIConstants.kDriverControl
                 -MathUtil.applyDeadband(m_driveController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    //
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    // Register Named Commands
+    NamedCommands.registerCommand("score", new InstantCommand(() -> System.out.println("Score L4")));
+    NamedCommands.registerCommand("leaveZone", new InstantCommand(() -> System.out.println("Leave Starting Zone")));
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -80,11 +97,14 @@ XboxController m_driveController = new XboxController(OIConstants.kDriverControl
             m_robotDrive));
     resetheading.onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(),m_robotDrive));
 
-  //Motor Button X Control
+  //Motor Button X and y Control
   Elevatorcontrol
-    .onTrue(new InstantCommand(() -> m_ElevatorSubsystem.setMotorSpeed(ElevatorSubsystemconstant.KDefualtMotorspeed)));
-    Elevatorcontrol
-    .onFalse(new InstantCommand(() -> m_ElevatorSubsystem.setMotorSpeed(0.0)));
+    .whileTrue(new InstantCommand(() -> m_ElevatorSubsystem.setMotorSpeed(ElevatorSubsystemconstant.KDefualtMotorspeed)));
+    
+
+  Elevatorcontrol2
+    .whileTrue(new InstantCommand(() -> m_ElevatorSubsystem.setMotorSpeed(-0.5)));
+    
 
   }
 
@@ -94,6 +114,7 @@ XboxController m_driveController = new XboxController(OIConstants.kDriverControl
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    /*   REMOVE  THIS COMMENT TO ENABLE TRAJECTORY AUTO (also remove lots of unused import statements)
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
@@ -132,5 +153,7 @@ XboxController m_driveController = new XboxController(OIConstants.kDriverControl
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+    */
+    return autoChooser.getSelected();  // use this line for Path Planner Selector
   }
 }
