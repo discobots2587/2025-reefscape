@@ -42,7 +42,7 @@ public class RobotContainer {
   // The driver's controller
 XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
   private final JoystickButton resetheading = new JoystickButton(m_driveController, XboxController.Button.kB.value);
-  private final JoystickButton Elevatorcontrol = new JoystickButton(m_driveController, XboxController.Button.kX.value);
+  private final JoystickButton Elevatorcontrol = new JoystickButton(m_driveController, XboxController.Button.kLeftBumper.value);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -82,7 +82,9 @@ XboxController m_driveController = new XboxController(OIConstants.kDriverControl
 
   //Motor Button X Control
   Elevatorcontrol
-    .whileTrue(new InstantCommand(() -> m_ElevatorSubsystem.setMotorSpeed(ElevatorSubsystemconstant.KDefualtMotorspeed)));
+    .onTrue(new InstantCommand(() -> m_ElevatorSubsystem.setMotorSpeed(ElevatorSubsystemconstant.KDefualtMotorspeed)));
+    Elevatorcontrol
+    .onFalse(new InstantCommand(() -> m_ElevatorSubsystem.setMotorSpeed(0.0)));
 
   }
 

@@ -17,6 +17,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   // Speed variable for debugging and SmartDashboard control
   private double m_speed;
 
+  private double m_armSpeed = 0;
+
   /**
    * Creates a new SingleMotorSubsystem.
    *
@@ -28,7 +30,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     
     // Set default speed to 0
-    m_speed = 0;
+    m_speed = -1;
 
     // Add a SmartDashboard entry for motor speed adjustment
     SmartDashboard.putNumber("Single Motor Speed", m_speed);
@@ -40,10 +42,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_speed = SmartDashboard.getNumber("Single Motor Speed", 0);
 
     // Set the motor speed
-    setMotorSpeed(m_speed);
+    //setMotorSpeed(m_speed);
 
     // Display the current motor speed on the SmartDashboard
-    SmartDashboard.putNumber("Single Motor Actual Speed", m_speed);
+    SmartDashboard.putNumber("Single Motor Actual Speed", m_armSpeed);
   }
 
   /**
@@ -53,7 +55,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   public void setMotorSpeed(double speed) {
     // Ensure the speed is within the valid range [-1.0, 1.0]
-    speed = Math.max(-1.0, Math.min(1.0, speed));
+    m_armSpeed = speed;
     m_singleMotor.set(speed);
   }
 
