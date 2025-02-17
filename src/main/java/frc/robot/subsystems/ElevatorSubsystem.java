@@ -5,6 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -13,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.security.Policy;
 
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.Angle;
@@ -23,9 +27,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   // Define the Spark Max motor controller
   private final SparkMax m_singleMotor;
+  private SparkMaxConfig motorConfig;
   private RelativeEncoder m_encoder;
   private SparkMaxPIDController m_pidController;
-  private DigitalInput homeSwitch;
+  private DigitalInput homeSwitch = new DigitalInput(1);
 
   //target angle 
   private double m_targetAngle;
@@ -58,7 +63,19 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   public ElevatorSubsystem(int motorCANID) {
     // Initialize the motor controller with the specified CAN ID
+    motorConfig = new SparkMaxConfig();
+
+        motorConfig
+                .inverted(false)
+                .idleMode(IdleMode.kBrake)
+                .smartCurrentLimit(60);
+        /*motorConfig.encoder
+                .positionConversionFactor(ENCODER_ROTATIONS_TO_METERS)
+                .velocityConversionFactor(ENCODER_ROTATIONS_TO_METERS / 60.0);
+                */
+
     m_singleMotor = new SparkMax(motorCANID, MotorType.kBrushless); // Assume it's a brushless motor
+   m_singleMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     m_encoder = m_singleMotor.getEncoder();
     m_pidController = new SparkMaxPIDController(kP, kI, kD);
@@ -66,7 +83,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     
   
     // Set default speed to 0
-    m_speed = -1;
+    m_speed = -0.1;
     m_targetAngle = getMotorAngle();
     // Add a SmartDashboard entry for motor speed adjustment
     SmartDashboard.putNumber("Single Motor Speed", m_speed);
@@ -160,9 +177,9 @@ public void holdPosition(){
    *
    * @param speed The speed to set the motor, between -1.0 and 1.0.
    */
-  public void setMotorSpeed(double speed) {
+  public void setLiftSpeed(double speed) {
     // Ensure the speed is within the valid range [-1.0, 1.0]
-    m_armSpeed = speed;
+   // m_armSpeed = speed;
     m_singleMotor.set(speed);
   }
   

@@ -28,6 +28,11 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
+
+
+
+
+    
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(20.5);
     // Distance between centers of right and left wheels on robot
@@ -78,6 +83,7 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int k0pControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
   }
 
@@ -101,7 +107,60 @@ public final class Constants {
   }
   public final class ElevatorSubsystemconstant {
     public static final double KDefualtMotorspeed = 0.5;
-    public static final int ElevatorSubsystemCanId = 51;
+    public static final int ElevatorSubsystemCanId = 48;
+  }
+  public static final class CoralSubsystemConstants {
+    public static final int kElevatorMotorCanId = 4;
+    public static final int kArmMotorCanId = 3;
+    public static final int kIntakeMotorCanId = 2;
+
+    public static final class ElevatorSetpoints {
+      public static final int kFeederStation = 50;
+      public static final int kLevel1 = 0;
+      public static final int kLevel2 = 100;
+      public static final int kLevel3 = 150;
+      public static final int kLevel4 = 200;
+    }
+
+    public static final class ArmSetpoints {
+      public static final double kFeederStation = 0;
+      public static final double kLevel1 = 0;
+      public static final double kLevel2 = 13;
+      public static final double kLevel3 = 18;
+      public static final double kLevel4 = 20;
+    }
+
+    public static final class IntakeSetpoints {
+      public static final double kForward = 0.5;
+      public static final double kReverse = -0.5;
+    }
+  }
+  public static final class SimulationRobotConstants {
+    public static final double kPixelsPerMeter = 20;
+
+    public static final double kElevatorGearing = 45; // 45:1
+    public static final double kCarriageMass =
+        4.3 + 3.15 + 0.151; // Kg, arm + elevator stage + chain
+    public static final double kElevatorDrumRadius = 0.035 / 2.0; // m
+    public static final double kMinElevatorHeightMeters = 0.64; // m
+    public static final double kMaxElevatorHeightMeters = 1.65; // m
+
+    public static final double kArmReduction = 50; // 50:1
+    public static final double kArmLength = 0.46; // m
+    public static final double kArmMass = 4.3; // Kg
+    public static final double kMinAngleRads =
+        Units.degreesToRadians(-90 ); // -50.1 deg from horiz
+    public static final double kMaxAngleRads =
+        Units.degreesToRadians(85 ); // 40.9 deg from horiz
+
+    public static final double kIntakeReduction = 135; // 135:1
+    public static final double kIntakeLength = 0.4032262; // m
+    public static final double kIntakeMass = 5.8738; // Kg
+    public static final double kIntakeMinAngleRads = Units.degreesToRadians(80);
+    public static final double kIntakeMaxAngleRads = Units.degreesToRadians(180);
+    public static final double kIntakeShortBarLength = 0.1524;
+    public static final double kIntakeLongBarLength = 0.3048;
+    public static final double kIntakeBarAngleRads = Units.degreesToRadians(-60);
   }
 
 }

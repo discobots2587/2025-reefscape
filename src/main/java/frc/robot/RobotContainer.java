@@ -21,6 +21,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ElevatorSubsystemconstant;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.CoralSubsystem.Setpoint;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,6 +31,8 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.CoralSubsystem.Setpoint;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -43,13 +46,24 @@ import com.pathplanner.lib.auto.NamedCommands;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem(ElevatorSubsystemconstant.ElevatorSubsystemCanId);
+ // private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem(ElevatorSubsystemconstant.ElevatorSubsystemCanId);
+  private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();   
   
   // The driver's controller
 XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
+XboxController m_operatorController = new XboxController(OIConstants.k0pControllerPort);
   private final JoystickButton resetheading = new JoystickButton(m_driveController, XboxController.Button.kB.value);
-  private final JoystickButton Elevatorcontrol = new JoystickButton(m_driveController, XboxController.Button.kX.value);
-  private final JoystickButton Elevatorcontrol2 =  new JoystickButton(m_driveController, XboxController.Button.kY.value);
+  private final JoystickButton m_liftB = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
+  private final JoystickButton m_liftX = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
+  private final JoystickButton m_liftY=  new JoystickButton(m_operatorController, XboxController.Button.kY.value);
+  private final JoystickButton m_liftA=  new JoystickButton(m_operatorController, XboxController.Button.kA.value);
+  private final JoystickButton m_up = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton m_down = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
+  private final JoystickButton m_stop = new JoystickButton(m_operatorController,XboxController.Button.kA.value);
+  private final JoystickButton m_armUp = new JoystickButton(m_operatorController, XboxController.Button.kStart.value);
+  private final JoystickButton m_armDown = new JoystickButton(m_operatorController, XboxController.Button.kBack.value);
+  private final JoystickButton resetCoral = new JoystickButton(m_driveController, XboxController.Button.kStart.value);
+
   // Auto chooser
   private SendableChooser<Command> autoChooser;
 
@@ -94,23 +108,61 @@ XboxController m_driveController = new XboxController(OIConstants.kDriverControl
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driveController, Button.kR1.value)
+    /*new JoystickButton(m_driveController, Button.kR1.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
-            m_robotDrive));
+            m_robotDrive));*/
     resetheading.onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(),m_robotDrive));
 
   //Motor Button X and y Control
-  Elevatorcontrol
-    .whileTrue(new InstantCommand(() -> m_ElevatorSubsystem.setMotorSpeed(ElevatorSubsystemconstant.KDefualtMotorspeed)));
+ m_up
+    .whileTrue(new InstantCommand(() -> m_coralSubSystem.setLiftSpeed(ElevatorSubsystemconstant.KDefualtMotorspeed)));
+    m_up
+    .onFalse(new InstantCommand(() -> m_coralSubSystem.setLiftSpeed(0)));    
+
+m_down
+    .whileTrue(new InstantCommand(() -> m_coralSubSystem.setLiftSpeed(-0.5)));
+
+m_down .onFalse(new InstantCommand(() -> m_coralSubSystem.setLiftSpeed(0)));
+
+m_stop
+    .onTrue(new InstantCommand(() -> m_coralSubSystem.setLiftSpeed(0))); //TEMPORARY, NEED TO FIND A NEW BUTTON
+m_armUp
+    .whileTrue(new InstantCommand(() -> m_coralSubSystem.setArmSpeed(0.1)));
+m_armUp
+    .onFalse(new InstantCommand(() -> m_coralSubSystem.setArmSpeed(0)));    
+
+m_armDown
+    .whileTrue(new InstantCommand(() -> m_coralSubSystem.setArmSpeed(-0.1)));
+m_armDown
+    .onFalse(new InstantCommand(() -> m_coralSubSystem.setArmSpeed(0))); 
+
+    // B Button -> Elevator/Arm to human player position, set ball intake to stow
+    // when idle
+     
+    m_liftB
+        .onTrue(
+            m_coralSubSystem
+                .setSetpointCommand(Setpoint.kFeederStation)
+        );
+               // .alongWith(m_algaeSubsystem.stowCommand()));  -- remove
+
+    // A Button -> Elevator/Arm to level 2 position
+    m_liftA.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel2));
+
+    // X Button -> Elevator/Arm to level 3 position
+    m_liftX.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel3));
+
+    // Y Button -> Elevator/Arm to level 4 position
+    m_liftY.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel4));
+
+    resetCoral.onTrue (new InstantCommand(() -> m_coralSubSystem.resetCoral()));
+    m_coralSubSystem.resetCoral();
     
 
-  Elevatorcontrol2
-    .whileTrue(new InstantCommand(() -> m_ElevatorSubsystem.setMotorSpeed(-0.5)));
     
 
   }
-  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
