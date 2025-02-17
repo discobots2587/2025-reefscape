@@ -15,6 +15,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.simulation.JoystickSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.AutoConstants;
@@ -31,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
 
@@ -48,6 +50,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
  // private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem(ElevatorSubsystemconstant.ElevatorSubsystemCanId);
   private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();   
+  private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   
   // The driver's controller
 XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
@@ -63,6 +66,7 @@ XboxController m_operatorController = new XboxController(OIConstants.k0pControll
   private final JoystickButton m_armUp = new JoystickButton(m_operatorController, XboxController.Button.kStart.value);
   private final JoystickButton m_armDown = new JoystickButton(m_operatorController, XboxController.Button.kBack.value);
   private final JoystickButton resetCoral = new JoystickButton(m_driveController, XboxController.Button.kStart.value);
+ // private final  = new JoystickTrigger(m_driveController, XboxController.Button.kRightTrigger.value);
 
   // Auto chooser
   private SendableChooser<Command> autoChooser;
@@ -94,6 +98,9 @@ XboxController m_operatorController = new XboxController(OIConstants.k0pControll
     NamedCommands.registerCommand("leaveZone", new InstantCommand(() -> System.out.println("Leave Starting Zone")));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
+// Set the ball intake to in/out when not running based on internal state
+    m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.idleCommand());
 
     
   }
@@ -158,9 +165,19 @@ m_armDown
 
     resetCoral.onTrue (new InstantCommand(() -> m_coralSubSystem.resetCoral()));
     m_coralSubSystem.resetCoral();
+
+ // Right Trigger -> Run ball intake, set to leave out when idle
+ CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+     m_driverController
+        .rightTrigger(OIConstants.kTriggerButtonThreshold)
+        .whileTrue(m_algaeSubsystem.runIntakeCommand());
+
+    // Left Trigger -> Run ball intake in reverse, set to stow when idle
+     m_driverController
+        .leftTrigger(OIConstants.kTriggerButtonThreshold)
+        .whileTrue(m_algaeSubsystem.reverseIntakeCommand());
     
 
-    
 
   }
 

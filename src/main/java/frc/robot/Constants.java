@@ -85,8 +85,9 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final int k0pControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
+    public static final double kTriggerButtonThreshold = 0.2;
   }
-
+  
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
@@ -112,7 +113,7 @@ public final class Constants {
   public static final class CoralSubsystemConstants {
     public static final int kElevatorMotorCanId = 4;
     public static final int kArmMotorCanId = 3;
-    public static final int kIntakeMotorCanId = 2;
+    public static final int kIntakeMotorCanId = 26;
     public static final int kFunalMotor = 5;
     public static final int kPivitMotor = 6;
 
@@ -137,6 +138,23 @@ public final class Constants {
       public static final double kReverse = -0.5;
     }
   }
+  public static final class AlgaeSubsystemConstants {
+    public static final int kIntakeMotorCanId = 2;
+    public static final int kPivotMotorCanId = 6;
+
+    public static final class ArmSetpoints {
+      public static final double kStow = 18.5;
+      public static final double kHold = 11.5;
+      public static final double kDown = 0;
+    }
+
+    public static final class IntakeSetpoints {
+      public static final double kForward = 0.5;
+      public static final double kReverse = -0.5;
+      public static final double kHold = 0.25;
+    }
+  }
+
   public static final class SimulationRobotConstants {
     public static final double kPixelsPerMeter = 20;
 
@@ -168,5 +186,6 @@ public final class Constants {
     public static final int kFunalMotorCanID = 5;
     public static final int kPivitMotorCanID = 6;
     public static final int kArmMotorCanID = 25;
+    public static final int kIntakeMotorCanID = 26;
   }
 }
