@@ -23,6 +23,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ElevatorSubsystemconstant;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -51,6 +52,7 @@ public class RobotContainer {
  // private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem(ElevatorSubsystemconstant.ElevatorSubsystemCanId);
   private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();   
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
+  private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   
   // The driver's controller
 XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
@@ -66,6 +68,8 @@ XboxController m_operatorController = new XboxController(OIConstants.k0pControll
   private final JoystickButton m_armUp = new JoystickButton(m_operatorController, XboxController.Button.kStart.value);
   private final JoystickButton m_armDown = new JoystickButton(m_operatorController, XboxController.Button.kBack.value);
   private final JoystickButton resetCoral = new JoystickButton(m_driveController, XboxController.Button.kStart.value);
+  private final JoystickButton m_Intake = new JoystickButton(m_driveController, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton m_outake = new JoystickButton(m_driveController, XboxController.Button.kRightBumper.value);
  // private final  = new JoystickTrigger(m_driveController, XboxController.Button.kRightTrigger.value);
 
   // Auto chooser
@@ -143,6 +147,11 @@ m_armDown
     .whileTrue(new InstantCommand(() -> m_coralSubSystem.setArmSpeed(-0.1)));
 m_armDown
     .onFalse(new InstantCommand(() -> m_coralSubSystem.setArmSpeed(0))); 
+m_Intake
+    .whileTrue(new InstantCommand(() -> m_algaeSubsystem.runIntakeCommand()));
+m_outake
+    .onFalse(new InstantCommand(() -> m_algaeSubsystem.reverseIntakeCommand()));
+
 
     // B Button -> Elevator/Arm to human player position, set ball intake to stow
     // when idle
@@ -166,6 +175,8 @@ m_armDown
     resetCoral.onTrue (new InstantCommand(() -> m_coralSubSystem.resetCoral()));
     m_coralSubSystem.resetCoral();
 
+    
+
  // Right Trigger -> Run ball intake, set to leave out when idle
  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
      m_driverController
@@ -176,7 +187,15 @@ m_armDown
      m_driverController
         .leftTrigger(OIConstants.kTriggerButtonThreshold)
         .whileTrue(m_algaeSubsystem.reverseIntakeCommand());
+
+
     
+    /**
+     * POV is a direction on the D-Pad or directional arrow pad of the controller,
+     * the direction of this will be different depending on how your winch is wound
+     */
+    m_driverController.pov(0).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(0.5)));
+    m_driverController.pov(180).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(-0.5)));
 
 
   }

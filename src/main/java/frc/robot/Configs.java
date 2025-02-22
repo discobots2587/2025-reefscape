@@ -59,7 +59,7 @@ public final class Configs {
     public static final SparkMaxConfig armConfig = new SparkMaxConfig();
     public static final SparkFlexConfig elevatorConfig = new SparkFlexConfig();
     public static final SparkMaxConfig intakeConfig = new SparkMaxConfig();
-    public static final boolean setpointMode = true;
+    public static final boolean setpointMode = false;
 
     static {
       // Configure basic settings of the arm motor
@@ -74,15 +74,18 @@ public final class Configs {
       armConfig
         .inverted(true)
           .closedLoop
-          .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+          .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
           // Set PID values for position control
           .p(0.1)
-          .outputRange(-1, 1)
+          .outputRange(-.2, +.2)
+          .positionWrappingEnabled(true)
           .maxMotion
           // Set MAXMotion parameters for position control
           .maxVelocity(2000)
           .maxAcceleration(10000)
-          .allowedClosedLoopError(0.25);
+          .allowedClosedLoopError(0.05);
+          
+
       } else{
         armConfig
                 .inverted(true)
@@ -130,7 +133,7 @@ public final class Configs {
   }
 
   public static final class AlgaeSubsystem {
-    public static final SparkFlexConfig intakeConfig = new SparkFlexConfig();
+    public static final SparkMaxConfig intakeConfig = new SparkMaxConfig();
     public static final SparkFlexConfig armConfig = new SparkFlexConfig();
 
     static {
@@ -147,7 +150,7 @@ public final class Configs {
           // Set PID values for position control. We don't need to pass a closed
           // loop slot, as it will default to slot 0.
           .p(0.1)
-          .outputRange(-0.5, 0.5);
+          .outputRange(-0.2, 0.2);
 
       // Configure basic settings of the intake motor
       intakeConfig.inverted(true).idleMode(IdleMode.kBrake).smartCurrentLimit(40);

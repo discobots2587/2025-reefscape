@@ -113,9 +113,8 @@ public final class Constants {
   public static final class CoralSubsystemConstants {
     public static final int kElevatorMotorCanId = 4;
     public static final int kArmMotorCanId = 3;
-    public static final int kIntakeMotorCanId = 26;
-    public static final int kFunalMotor = 5;
-    public static final int kPivitMotor = 6;
+    public static final int kIntakeMotorCanId = 9;
+   
 
     public static final class ElevatorSetpoints {
       public static final int kFeederStation = 50;
@@ -128,9 +127,9 @@ public final class Constants {
     public static final class ArmSetpoints {
       public static final double kFeederStation = 0;
       public static final double kLevel1 = 0;
-      public static final double kLevel2 = 13;
-      public static final double kLevel3 = 18;
-      public static final double kLevel4 = 20;
+      public static final double kLevel2 = 0.25;
+      public static final double kLevel3 = 0.3;
+      public static final double kLevel4 = 0.4;
     }
 
     public static final class IntakeSetpoints {
@@ -139,8 +138,8 @@ public final class Constants {
     }
   }
   public static final class AlgaeSubsystemConstants {
-    public static final int kIntakeMotorCanId = 2;
-    public static final int kPivotMotorCanId = 6;
+    public static final int kIntakeMotorCanId = 6;
+    public static final int kPivotMotorCanId = 5;
 
     public static final class ArmSetpoints {
       public static final double kStow = 18.5;
@@ -149,8 +148,8 @@ public final class Constants {
     }
 
     public static final class IntakeSetpoints {
-      public static final double kForward = 0.5;
-      public static final double kReverse = -0.5;
+      public static final double kForward = 0.8;
+      public static final double kReverse = -0.8;
       public static final double kHold = 0.25;
     }
   }
@@ -169,23 +168,28 @@ public final class Constants {
     public static final double kArmLength = 0.46; // m
     public static final double kArmMass = 4.3; // Kg
     public static final double kMinAngleRads =
-        Units.degreesToRadians(-90 ); // -50.1 deg from horiz
+        Units.degreesToRadians(-75 ); // -90 deg from horiz
     public static final double kMaxAngleRads =
-        Units.degreesToRadians(85 ); // 40.9 deg from horiz
+        Units.degreesToRadians(85 ); // 85 deg from horiz
 
     public static final double kIntakeReduction = 135; // 135:1
     public static final double kIntakeLength = 0.4032262; // m
     public static final double kIntakeMass = 5.8738; // Kg
-    public static final double kIntakeMinAngleRads = Units.degreesToRadians(80);
-    public static final double kIntakeMaxAngleRads = Units.degreesToRadians(180);
-    public static final double kIntakeShortBarLength = 0.1524;
-    public static final double kIntakeLongBarLength = 0.3048;
+    public static final double kIntakeMinAngleRads = Units.degreesToRadians(50); // 80
+    public static final double kIntakeMaxAngleRads = Units.degreesToRadians(150); // 180
+    public static final double kIntakeShortBarLength = 0.3048;  // 0.1524
+    public static final double kIntakeLongBarLength = 0.05;   // 0.3048
     public static final double kIntakeBarAngleRads = Units.degreesToRadians(-60);
   }
   public final class AlgaeSubsystemConstant {
-    public static final int kFunalMotorCanID = 5;
-    public static final int kPivitMotorCanID = 6;
+    public static final int kFunalMotorCanID = 26 ;
     public static final int kArmMotorCanID = 25;
-    public static final int kIntakeMotorCanID = 26;
+  }
+  public static final class ClimberConstants {
+    public static final int CLIMBER_MOTOR_ID = 25;
+    public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 60;
+    public static final double CLIMBER_MOTOR_VOLTAGE_COMP = 12;
+    public static final double CLIMBER_SPEED_DOWN = -0.5;
+    public static final double CLIMBER_SPEED_UP = 0.5;
   }
 }

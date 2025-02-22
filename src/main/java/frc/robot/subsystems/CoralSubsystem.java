@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.sim.SparkFlexSim;
 import com.revrobotics.sim.SparkLimitSwitchSim;
 import com.revrobotics.sim.SparkMaxSim;
@@ -31,6 +32,7 @@ import frc.robot.Constants.SimulationRobotConstants;
 import frc.robot.Constants.ElevatorSubsystemconstant;
 
 
+
 public class CoralSubsystem extends SubsystemBase {
   /** Subsystem-wide setpoints */
   public enum Setpoint {
@@ -47,6 +49,7 @@ public class CoralSubsystem extends SubsystemBase {
       new SparkMax(CoralSubsystemConstants.kArmMotorCanId, MotorType.kBrushless);
   private SparkClosedLoopController armController = armMotor.getClosedLoopController();
   private RelativeEncoder armEncoder = armMotor.getEncoder();
+  private AbsoluteEncoder angleEncoder = armMotor.getAbsoluteEncoder();
 
   // Initialize elevator SPARK. We will use MAXMotion position control for the elevator, so we also
   // need to initialize the closed loop controller and encoder.
@@ -55,6 +58,7 @@ public class CoralSubsystem extends SubsystemBase {
   private SparkClosedLoopController elevatorClosedLoopController =
       elevatorMotor.getClosedLoopController();
   private RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
+
 
   // Initialize intake SPARK. We will use open loop control for this so we don't need a closed loop
   // controller like above.
@@ -66,6 +70,9 @@ public class CoralSubsystem extends SubsystemBase {
   private boolean wasResetByLimit = false;
   private double armCurrentTarget = ArmSetpoints.kLevel1;
   private double elevatorCurrentTarget = ElevatorSetpoints.kLevel1;
+  private double angleCurrentTarget = ArmSetpoints.kLevel1;
+  private double initialAngle = 1;
+
 
   // Simulation setup and variables
   private DCMotor elevatorMotorModel = DCMotor.getNeoVortex(1);
@@ -117,7 +124,11 @@ public class CoralSubsystem extends SubsystemBase {
               SimulationRobotConstants.kArmLength * SimulationRobotConstants.kPixelsPerMeter,
               180 - Units.radiansToDegrees(SimulationRobotConstants.kMinAngleRads) - 90));
 
-  public CoralSubsystem() {
+
+
+  public CoralSubsystem() { 
+    //initialAngle = armEncoder.getPosition();
+    initialAngle = angleEncoder.getPosition();
     /*
      * Apply the appropriate configurations to the SPARKs.
      *
@@ -141,6 +152,8 @@ public class CoralSubsystem extends SubsystemBase {
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
+    
+
     // Display mechanism2d
     SmartDashboard.putData("Coral Subsystem", m_mech2d);
 
@@ -148,6 +161,7 @@ public class CoralSubsystem extends SubsystemBase {
     armEncoder.setPosition(0);
     elevatorEncoder.setPosition(0);
 
+    
     // Initialize simulation values
     elevatorMotorSim = new SparkFlexSim(elevatorMotor, elevatorMotorModel);
     elevatorLimitSwitchSim = new SparkLimitSwitchSim(elevatorMotor, false);
@@ -183,7 +197,7 @@ public class CoralSubsystem extends SubsystemBase {
       // Zero the encoders only when button switches from "unpressed" to "pressed" to prevent
       // constant zeroing while pressed
       wasResetByButton = true;
-      armEncoder.setPosition(0);
+      //HACK armEncoder.setPosition(0);
       elevatorEncoder.setPosition(0);
     } else if (!RobotController.getUserButton()) {
       wasResetByButton = false;
@@ -265,7 +279,7 @@ public class CoralSubsystem extends SubsystemBase {
   }
   public void resetCoral (){
     elevatorEncoder.setPosition(0);
-      armEncoder.setPosition(0);
+      // HACK armEncoder.setPosition(0);
   }
   public void initializeCoral(){
     armCurrentTarget = 0;
@@ -282,9 +296,18 @@ public class CoralSubsystem extends SubsystemBase {
     // Display subsystem values
     SmartDashboard.putNumber("Coral/Arm/Target Position", armCurrentTarget);
     SmartDashboard.putNumber("Coral/Arm/Actual Position", armEncoder.getPosition());
+    SmartDashboard.putNumber("Coral/ArmAngle/Target Angle", angleCurrentTarget);
+    SmartDashboard.putNumber("Coral/ArmAngle/Actual Angle", angleEncoder.getPosition());
+    SmartDashboard.putNumber("Coral/ArmAngle/Initial Angle", initialAngle);
     SmartDashboard.putNumber("Coral/Elevator/Target Position", elevatorCurrentTarget);
     SmartDashboard.putNumber("Coral/Elevator/Actual Position", elevatorEncoder.getPosition());
     SmartDashboard.putNumber("Coral/Intake/Applied Output", intakeMotor.getAppliedOutput());
+    if ( elevatorMotor.getReverseLimitSwitch().isPressed()) {
+      SmartDashboard.putNumber("Coral/Elevator/Down", 1);
+    } else {
+      SmartDashboard.putNumber("Coral/Elevator/Down", 0);
+    }
+
 
     // Update mechanism2d
     m_elevatorMech2d.setLength(
@@ -329,12 +352,11 @@ public class CoralSubsystem extends SubsystemBase {
             * 60.0,
         RobotController.getBatteryVoltage(),
         0.02);
-    /*armMotorSim.iterate(
+    armMotorSim.iterate(
         Units.radiansPerSecondToRotationsPerMinute(
             m_armSim.getVelocityRadPerSec() * SimulationRobotConstants.kArmReduction),
         RobotController.getBatteryVoltage(),
         0.02);
-*/
     // SimBattery is updated in Robot.java
   }
 }
