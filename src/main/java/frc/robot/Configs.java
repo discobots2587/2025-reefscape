@@ -59,7 +59,7 @@ public final class Configs {
     public static final SparkMaxConfig armConfig = new SparkMaxConfig();
     public static final SparkFlexConfig elevatorConfig = new SparkFlexConfig();
     public static final SparkMaxConfig intakeConfig = new SparkMaxConfig();
-    public static final boolean setpointMode = false;
+    public static final boolean setpointMode = true;
 
     static {
       // Configure basic settings of the arm motor
@@ -83,7 +83,7 @@ public final class Configs {
           // Set MAXMotion parameters for position control
           .maxVelocity(2000)
           .maxAcceleration(10000)
-          .allowedClosedLoopError(0.05);
+          .allowedClosedLoopError(0.01);
           
 
       } else{
@@ -139,19 +139,19 @@ public final class Configs {
     static {
       // Configure basic setting of the arm motor
       armConfig.smartCurrentLimit(40);
-
+      armConfig.idleMode(IdleMode.kBrake);
       /*
        * Configure the closed loop controller. We want to make sure we set the
        * feedback sensor as the primary encoder.
        */
-      armConfig
+     /*  armConfig
           .closedLoop
           .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
           // Set PID values for position control. We don't need to pass a closed
           // loop slot, as it will default to slot 0.
           .p(0.1)
-          .outputRange(-0.2, 0.2);
-
+          .outputRange(-0.02, 0.02);
+        */
       // Configure basic settings of the intake motor
       intakeConfig.inverted(true).idleMode(IdleMode.kBrake).smartCurrentLimit(40);
     }

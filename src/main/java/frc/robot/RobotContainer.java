@@ -68,8 +68,8 @@ XboxController m_operatorController = new XboxController(OIConstants.k0pControll
   private final JoystickButton m_armUp = new JoystickButton(m_operatorController, XboxController.Button.kStart.value);
   private final JoystickButton m_armDown = new JoystickButton(m_operatorController, XboxController.Button.kBack.value);
   private final JoystickButton resetCoral = new JoystickButton(m_driveController, XboxController.Button.kStart.value);
-  private final JoystickButton m_Intake = new JoystickButton(m_driveController, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton m_outake = new JoystickButton(m_driveController, XboxController.Button.kRightBumper.value);
+  private final JoystickButton m_pivotIntake = new JoystickButton(m_driveController, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton m_pivotOutake = new JoystickButton(m_driveController, XboxController.Button.kRightBumper.value);
  // private final  = new JoystickTrigger(m_driveController, XboxController.Button.kRightTrigger.value);
 
   // Auto chooser
@@ -98,8 +98,16 @@ XboxController m_operatorController = new XboxController(OIConstants.k0pControll
     autoChooser = AutoBuilder.buildAutoChooser();
 
     // Register Named Commands
-    NamedCommands.registerCommand("score", new InstantCommand(() -> System.out.println("Score L4")));
+    NamedCommands.registerCommand("score4", new InstantCommand(() -> System.out.println("Score L4")));
+    NamedCommands.registerCommand("intakecoral", new InstantCommand(() -> System.out.println("Intake coral")));
     NamedCommands.registerCommand("leaveZone", new InstantCommand(() -> System.out.println("Leave Starting Zone")));
+    NamedCommands.registerCommand("liftl4", new InstantCommand(() -> System.out.println("lift level 4")));
+    NamedCommands.registerCommand("liftl0", new InstantCommand(() -> System.out.println("lift level 0")));
+    NamedCommands.registerCommand("armscore", new InstantCommand(() -> System.out.println("lower arm to reef")));
+    NamedCommands.registerCommand("reverse", new InstantCommand(() -> System.out.println("reverse from reef")));
+
+
+
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -147,10 +155,14 @@ m_armDown
     .whileTrue(new InstantCommand(() -> m_coralSubSystem.setArmSpeed(-0.1)));
 m_armDown
     .onFalse(new InstantCommand(() -> m_coralSubSystem.setArmSpeed(0))); 
-m_Intake
-    .whileTrue(new InstantCommand(() -> m_algaeSubsystem.runIntakeCommand()));
-m_outake
-    .onFalse(new InstantCommand(() -> m_algaeSubsystem.reverseIntakeCommand()));
+m_pivotIntake
+    .whileTrue(new InstantCommand(() -> m_algaeSubsystem.setPivotSpeed(0.1)));
+m_pivotIntake
+    .onFalse(new InstantCommand(() -> m_algaeSubsystem.setPivotSpeed(0)));
+m_pivotOutake
+    .whileTrue(new InstantCommand(() -> m_algaeSubsystem.setPivotSpeed(-0.1)));
+m_pivotOutake
+    .onFalse(new InstantCommand(() -> m_algaeSubsystem.setPivotSpeed(0)));
 
 
     // B Button -> Elevator/Arm to human player position, set ball intake to stow

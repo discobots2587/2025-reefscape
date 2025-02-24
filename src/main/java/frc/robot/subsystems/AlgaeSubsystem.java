@@ -184,10 +184,12 @@ public class AlgaeSubsystem extends SubsystemBase {
   private void setIntakePower(double power) {
     intakeMotor.set(power);
   }
-
+  public void setPivotSpeed(double power) {
+    armMotor.set(power);
+  }
   /** Set the arm motor position. This will use closed loop position control. */
   private void setIntakePosition(double position) {
-    armController.setReference(position, ControlType.kPosition);
+   //HACK armController.setReference(position, ControlType.kPosition);
   }
 
   @Override

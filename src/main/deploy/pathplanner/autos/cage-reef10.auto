@@ -7,19 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "reef"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": null
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "reef-processor"
+            "pathName": "cage-reef10"
           }
         }
       ]
