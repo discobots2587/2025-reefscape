@@ -36,6 +36,7 @@ import frc.robot.Constants.ElevatorSubsystemconstant;
 public class CoralSubsystem extends SubsystemBase {
   /** Subsystem-wide setpoints */
   public enum Setpoint {
+    kIntake,
     kFeederStation,
     kLevel1,
     kLevel2,
@@ -43,6 +44,7 @@ public class CoralSubsystem extends SubsystemBase {
     kLevel4;
   }
 
+  public Setpoint lastSetpoint = Setpoint.kIntake; // keep track of level to help with scoring arm down
   // Initialize arm SPARK. We will use MAXMotion position control for the arm, so we also need to
   // initialize the closed loop controller and encoder.
   private SparkMax armMotor =
@@ -68,9 +70,9 @@ public class CoralSubsystem extends SubsystemBase {
   // Member variables for subsystem state management
   private boolean wasResetByButton = false;
   private boolean wasResetByLimit = false;
-  private double armCurrentTarget = ArmSetpoints.kLevel1;
-  private double elevatorCurrentTarget = ElevatorSetpoints.kLevel1;
-  private double angleCurrentTarget = ArmSetpoints.kLevel1;
+  private double armCurrentTarget = ArmSetpoints.kIntake;
+  private double elevatorCurrentTarget = ElevatorSetpoints.kIntake;
+  private double angleCurrentTarget = ArmSetpoints.kIntake;
   private double initialAngle = 1;
 
 
@@ -221,6 +223,10 @@ public class CoralSubsystem extends SubsystemBase {
               armCurrentTarget = ArmSetpoints.kFeederStation;
               elevatorCurrentTarget = ElevatorSetpoints.kFeederStation;
               break;
+            case kIntake:
+              armCurrentTarget = ArmSetpoints.kIntake;
+              elevatorCurrentTarget = ElevatorSetpoints.kIntake;
+              break;
             case kLevel1:
               armCurrentTarget = ArmSetpoints.kLevel1;
               elevatorCurrentTarget = ElevatorSetpoints.kLevel1;
@@ -237,9 +243,44 @@ public class CoralSubsystem extends SubsystemBase {
               armCurrentTarget = ArmSetpoints.kLevel4;
               elevatorCurrentTarget = ElevatorSetpoints.kLevel4;
               break;
+            
           }
+          lastSetpoint = setpoint; // retain the last setpoint for scoring arm down
         });
   }
+  /* Scores the coral by moving arm down
+   * This is a separate command because the arm needs to move down after the elevator has reached
+   */
+  public Command scoreCoralCommand(){
+    return this.runOnce(
+      () -> {
+        double arm_delta = 0.2;
+        switch (this.lastSetpoint) {
+          case kLevel1:
+            if (armCurrentTarget == ArmSetpoints.kLevel1) {
+              armCurrentTarget = ArmSetpoints.kLevel1 - arm_delta;
+            }
+            break;
+          case kLevel2:
+            if (armCurrentTarget == ArmSetpoints.kLevel2) {
+              armCurrentTarget = ArmSetpoints.kLevel2 - arm_delta;
+            }
+            break;
+          case kLevel3:
+            if (armCurrentTarget == ArmSetpoints.kLevel3) {
+               armCurrentTarget = ArmSetpoints.kLevel3 - arm_delta;
+            }
+            break;
+          case kLevel4:
+            if (armCurrentTarget == ArmSetpoints.kLevel4) {
+              armCurrentTarget = ArmSetpoints.kLevel4 - arm_delta;
+            }
+            break;
+        }
+      });
+
+  }
+
     /**
    * Sets the speed of the single motor.
    *

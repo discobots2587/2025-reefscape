@@ -117,19 +117,21 @@ public final class Constants {
    
 
     public static final class ElevatorSetpoints {
-      public static final int kFeederStation = 0;
-      public static final int kLevel1 = 0;
+      public static final int kIntake = 0;
+      public static final int kFeederStation = 45;
+      public static final int kLevel1 = 30;
       public static final int kLevel2 = 120;
-      public static final int kLevel3 = 150;
+      public static final int kLevel3 = 165;
       public static final int kLevel4 = 381;
     }
 
     public static final class ArmSetpoints {
-      public static final double kFeederStation = 0;
-      public static final double kLevel1 = 0;
-      public static final double kLevel2 = 0;
-      public static final double kLevel3 = 0.38;
-      public static final double kLevel4 = 0.4;
+      public static final double kIntake = 0.24;
+      public static final double kFeederStation = 0.24;
+      public static final double kLevel1 = 0.24;
+      public static final double kLevel2 = 0.5;
+      public static final double kLevel3 = 0.63;
+      public static final double kLevel4 = 0.65;
     }
 
     public static final class IntakeSetpoints {
@@ -187,9 +189,9 @@ public final class Constants {
   }
   public static final class ClimberConstants {
     public static final int CLIMBER_MOTOR_ID = 25;
-    public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 60;
+    public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 10;
     public static final double CLIMBER_MOTOR_VOLTAGE_COMP = 12;
-    public static final double CLIMBER_SPEED_DOWN = -0.5;
-    public static final double CLIMBER_SPEED_UP = 0.5;
+    public static final double CLIMBER_SPEED_DOWN = -0.1;
+    public static final double CLIMBER_SPEED_UP = 0.1;
   }
 }

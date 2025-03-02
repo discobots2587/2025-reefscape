@@ -33,6 +33,10 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
+
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
@@ -79,6 +83,8 @@ XboxController m_operatorController = new XboxController(OIConstants.k0pControll
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    // Change this to match the name of your camera
+    PhotonCamera camera = new PhotonCamera("photonvision");
     // Configure the button bindings
     configureButtonBindings();
 
@@ -171,7 +177,7 @@ m_pivotOutake
     m_liftB
         .onTrue(
             m_coralSubSystem
-                .setSetpointCommand(Setpoint.kFeederStation)
+                .setSetpointCommand(Setpoint.kLevel1)
         );
                // .alongWith(m_algaeSubsystem.stowCommand()));  -- remove
 
@@ -201,15 +207,20 @@ m_pivotOutake
         .whileTrue(m_algaeSubsystem.reverseIntakeCommand());
 
 
+        
     
     /**
      * POV is a direction on the D-Pad or directional arrow pad of the controller,
      * the direction of this will be different depending on how your winch is wound
      */
-    m_driverController.pov(0).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(0.5)));
-    m_driverController.pov(180).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(-0.5)));
-
-
+    m_driverController.pov(0).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(0.1)));
+    m_driverController.pov(0).onFalse(new InstantCommand(() ->m_climberSubsystem.runClimber(0.0)));
+    m_driverController.pov(180).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(-0.1)));
+    m_driverController.pov(180).onFalse(new InstantCommand(() ->m_climberSubsystem.runClimber(0.0)));
+    CommandXboxController m_operatorController = new CommandXboxController(OIConstants.k0pControllerPort);
+     m_operatorController.pov(90).whileTrue(m_coralSubSystem.scoreCoralCommand());
+     m_operatorController.pov(180).whileTrue(m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kIntake));
+     m_operatorController.pov(0).whileTrue(m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kFeederStation));
   }
 
   /**

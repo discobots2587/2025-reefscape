@@ -27,6 +27,18 @@
           "data": {
             "name": "intakecoral"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "coral12-reef10"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score4"
+          }
         }
       ]
     }
