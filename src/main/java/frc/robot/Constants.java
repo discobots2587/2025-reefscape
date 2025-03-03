@@ -118,9 +118,10 @@ public final class Constants {
 
     public static final class ElevatorSetpoints {
       public static final int kIntake = 0;
+      //we need to change with the funnel
       public static final int kFeederStation = 45;
       public static final int kLevel1 = 30;
-      public static final int kLevel2 = 120;
+      public static final int kLevel2 = 30;
       public static final int kLevel3 = 165;
       public static final int kLevel4 = 381;
     }
@@ -129,8 +130,8 @@ public final class Constants {
       public static final double kIntake = 0.24;
       public static final double kFeederStation = 0.24;
       public static final double kLevel1 = 0.24;
-      public static final double kLevel2 = 0.5;
-      public static final double kLevel3 = 0.63;
+      public static final double kLevel2 = 0.63;
+      public static final double kLevel3 = 0.69;
       public static final double kLevel4 = 0.65;
     }
 

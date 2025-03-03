@@ -22,6 +22,8 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ElevatorSubsystemconstant;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.AlgaeSubsystemConstants.ArmSetpoints;
+import frc.robot.Constants.AlgaeSubsystemConstants.IntakeSetpoints;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -43,6 +45,7 @@ import frc.robot.subsystems.CoralSubsystem.Setpoint;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -119,6 +122,7 @@ XboxController m_operatorController = new XboxController(OIConstants.k0pControll
 
 // Set the ball intake to in/out when not running based on internal state
     m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.idleCommand());
+    
 
     
   }
@@ -169,6 +173,12 @@ m_pivotOutake
     .whileTrue(new InstantCommand(() -> m_algaeSubsystem.setPivotSpeed(-0.1)));
 m_pivotOutake
     .onFalse(new InstantCommand(() -> m_algaeSubsystem.setPivotSpeed(0)));
+    
+    //algaesubsystem set point intke
+/*m_pivotIntake.onTrue(m_algaeSubsystem.runIntakeCommand());
+m_pivotOutake.onTrue(m_algaeSubsystem.reverseIntakeCommand());
+*/
+    
 
 
     // B Button -> Elevator/Arm to human player position, set ball intake to stow
@@ -181,11 +191,13 @@ m_pivotOutake
         );
                // .alongWith(m_algaeSubsystem.stowCommand()));  -- remove
 
+    //GOAL: Merge setpoitns into 1 button, selectable level through a selector in smartdashboard
+    //Get to a point where we can access all 4 levels with 
     // A Button -> Elevator/Arm to level 2 position
-    m_liftA.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel2));
+    m_liftA.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel3));
 
-    // X Button -> Elevator/Arm to level 3 position
-    m_liftX.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel3));
+    // X Button -> Elevator/Arm to level 3 position (BUTTON WE ARE USING THIS FOR SETPOINTS)
+    m_liftX.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel2));
 
     // Y Button -> Elevator/Arm to level 4 position
     m_liftY.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel4));
@@ -193,7 +205,7 @@ m_pivotOutake
     resetCoral.onTrue (new InstantCommand(() -> m_coralSubSystem.resetCoral()));
     m_coralSubSystem.resetCoral();
 
-    
+
 
  // Right Trigger -> Run ball intake, set to leave out when idle
  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
