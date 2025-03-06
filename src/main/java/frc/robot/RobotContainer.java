@@ -107,7 +107,7 @@ XboxController m_operatorController = new XboxController(OIConstants.k0pControll
     autoChooser = AutoBuilder.buildAutoChooser();
 
     // Register Named Commands
-    NamedCommands.registerCommand("score4", new InstantCommand(() -> System.out.println("Score L4")));
+    NamedCommands.registerCommand("scoreL3", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kLevel3));
     NamedCommands.registerCommand("intakecoral", new InstantCommand(() -> System.out.println("Intake coral")));
     NamedCommands.registerCommand("leaveZone", new InstantCommand(() -> System.out.println("Leave Starting Zone")));
     NamedCommands.registerCommand("liftl4", new InstantCommand(() -> System.out.println("lift level 4")));
