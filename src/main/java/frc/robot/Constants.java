@@ -113,7 +113,11 @@ public final class Constants {
   public static final class CoralSubsystemConstants {
     public static final int kElevatorMotorCanId = 4;
     public static final int kArmMotorCanId = 3;
-    public static final int kIntakeMotorCanId = 9;
+    public static final int kFunnelMotorCanId = 9;
+    public static final int FUNNEL_MOTOR_CURRENT_LIMIT = 10;
+    public static final double FUNNEL_MOTOR_VOLTAGE_COMP = 12;
+    public static final double FUNNEL_SPEED_DOWN = -0.1;
+    public static final double FUNNEL_SPEED_UP = 0.1;
    
 
     public static final class ElevatorSetpoints {
@@ -132,7 +136,7 @@ public final class Constants {
       public static final double kLevel1 = 0.24;
       public static final double kLevel2 = 0.63;
       public static final double kLevel3 = 0.69;
-      public static final double kLevel4 = 0.65;
+      public static final double kLevel4 = 0.69;
     }
 
     public static final class IntakeSetpoints {

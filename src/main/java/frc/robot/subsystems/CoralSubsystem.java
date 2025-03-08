@@ -65,7 +65,7 @@ public class CoralSubsystem extends SubsystemBase {
   // Initialize intake SPARK. We will use open loop control for this so we don't need a closed loop
   // controller like above.
   private SparkMax intakeMotor =
-      new SparkMax(CoralSubsystemConstants.kIntakeMotorCanId, MotorType.kBrushless);
+      new SparkMax(CoralSubsystemConstants.kFunnelMotorCanId, MotorType.kBrushless);
 
   // Member variables for subsystem state management
   private boolean wasResetByButton = false;
@@ -254,7 +254,8 @@ public class CoralSubsystem extends SubsystemBase {
   public Command scoreCoralCommand(){
     return this.runOnce(
       () -> {
-        double arm_delta = 0.2;
+        double arm_delta = .22;
+        double arm_delta4 = 0.3;
         switch (this.lastSetpoint) {
           case kLevel1:
             if (armCurrentTarget == ArmSetpoints.kLevel1) {
@@ -273,7 +274,7 @@ public class CoralSubsystem extends SubsystemBase {
             break;
           case kLevel4:
             if (armCurrentTarget == ArmSetpoints.kLevel4) {
-              armCurrentTarget = ArmSetpoints.kLevel4 - arm_delta;
+              armCurrentTarget = ArmSetpoints.kLevel4 - arm_delta4;
             }
             break;
         }
