@@ -87,7 +87,8 @@ XboxController m_operatorController = new XboxController(OIConstants.k0pControll
    */
   public RobotContainer() {
     // Change this to match the name of your camera
-    PhotonCamera camera = new PhotonCamera("photonvision");
+    PhotonCamera cameraL = new PhotonCamera("FrontL");
+    PhotonCamera cameraR = new PhotonCamera("FrontR");
     // Configure the button bindings
     configureButtonBindings();
 
@@ -226,9 +227,9 @@ m_pivotOutake.onTrue(m_algaeSubsystem.reverseIntakeCommand());
      * POV is a direction on the D-Pad or directional arrow pad of the controller,
      * the direction of this will be different depending on how your winch is wound
      */
-    m_driverController.pov(0).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(0.1)));
+    m_driverController.pov(0).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(Constants.ClimberConstants.CLIMBER_SPEED_UP)));
     m_driverController.pov(0).onFalse(new InstantCommand(() ->m_climberSubsystem.runClimber(0.0)));
-    m_driverController.pov(180).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(-0.1)));
+    m_driverController.pov(180).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(Constants.ClimberConstants.CLIMBER_SPEED_DOWN)));
     m_driverController.pov(180).onFalse(new InstantCommand(() ->m_climberSubsystem.runClimber(0.0)));
     CommandXboxController m_operatorController = new CommandXboxController(OIConstants.k0pControllerPort);
      m_operatorController.pov(90).whileTrue(m_coralSubSystem.scoreCoralCommand());

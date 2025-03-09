@@ -125,8 +125,8 @@ public final class Constants {
       //we need to change with the funnel
       public static final int kFeederStation = 45;
       public static final int kLevel1 = 30;
-      public static final int kLevel2 = 30;
-      public static final int kLevel3 = 165;
+      public static final int kLevel2 = 15; //Was 30
+      public static final int kLevel3 = 150; //Was 165
       public static final int kLevel4 = 381;
     }
 
@@ -134,8 +134,8 @@ public final class Constants {
       public static final double kIntake = 0.24;
       public static final double kFeederStation = 0.24;
       public static final double kLevel1 = 0.24;
-      public static final double kLevel2 = 0.63;
-      public static final double kLevel3 = 0.69;
+      public static final double kLevel2 = 0.69; //Was 0.63
+      public static final double kLevel3 = 0.72; //Was 0.69
       public static final double kLevel4 = 0.69;
     }
 
@@ -194,9 +194,9 @@ public final class Constants {
   }
   public static final class ClimberConstants {
     public static final int CLIMBER_MOTOR_ID = 25;
-    public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 10;
+    public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 50;
     public static final double CLIMBER_MOTOR_VOLTAGE_COMP = 12;
-    public static final double CLIMBER_SPEED_DOWN = -0.1;
-    public static final double CLIMBER_SPEED_UP = 0.1;
+    public static final double CLIMBER_SPEED_DOWN = -0.5;
+    public static final double CLIMBER_SPEED_UP = .5;
   }
 }
