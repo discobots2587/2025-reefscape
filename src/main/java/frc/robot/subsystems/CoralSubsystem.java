@@ -215,39 +215,42 @@ public class CoralSubsystem extends SubsystemBase {
    * Command to set the subsystem setpoint. This will set the arm and elevator to their predefined
    * positions for the given setpoint.
    */
-  public Command setSetpointCommand(Setpoint setpoint) {
-    return this.runOnce(
-        () -> {
-          switch (setpoint) {
+ public Command setSetpointCommand(Setpoint setpoint) {
+    return this.run(() -> {
+        switch (setpoint) {
             case kFeederStation:
-              armCurrentTarget = ArmSetpoints.kFeederStation;
-              elevatorCurrentTarget = ElevatorSetpoints.kFeederStation;
-              break;
+                armCurrentTarget = ArmSetpoints.kFeederStation;
+                elevatorCurrentTarget = ElevatorSetpoints.kFeederStation;
+                break;
             case kIntake:
-              armCurrentTarget = ArmSetpoints.kIntake;
-              elevatorCurrentTarget = ElevatorSetpoints.kIntake;
-              break;
+                armCurrentTarget = ArmSetpoints.kIntake;
+                elevatorCurrentTarget = ElevatorSetpoints.kIntake;
+                break;
             case kLevel1:
-              armCurrentTarget = ArmSetpoints.kLevel1;
-              elevatorCurrentTarget = ElevatorSetpoints.kLevel1;
-              break;
+                armCurrentTarget = ArmSetpoints.kLevel1;
+                elevatorCurrentTarget = ElevatorSetpoints.kLevel1;
+                break;
             case kLevel2:
-              armCurrentTarget = ArmSetpoints.kLevel2;
-              elevatorCurrentTarget = ElevatorSetpoints.kLevel2;
-              break;
+                armCurrentTarget = ArmSetpoints.kLevel2;
+                elevatorCurrentTarget = ElevatorSetpoints.kLevel2;
+                break;
             case kLevel3:
-              armCurrentTarget = ArmSetpoints.kLevel3;
-              elevatorCurrentTarget = ElevatorSetpoints.kLevel3;
-              break;
+                armCurrentTarget = ArmSetpoints.kLevel3;
+                elevatorCurrentTarget = ElevatorSetpoints.kLevel3;
+                break;
             case kLevel4:
-              armCurrentTarget = ArmSetpoints.kLevel4;
-              elevatorCurrentTarget = ElevatorSetpoints.kLevel4;
-              break;
-            
-          }
-          lastSetpoint = setpoint; // retain the last setpoint for scoring arm down
-        });
-  }
+                armCurrentTarget = ArmSetpoints.kLevel4;
+                elevatorCurrentTarget = ElevatorSetpoints.kLevel4;
+                break;
+        }
+        lastSetpoint = setpoint; // retain the last setpoint for scoring arm down
+    }).until(() -> {
+        // Check if both the arm and elevator have reached their targets
+        boolean armAtTarget = Math.abs(armEncoder.getPosition() - armCurrentTarget) < 0.05; // Tolerance
+        boolean elevatorAtTarget = Math.abs(elevatorEncoder.getPosition() - elevatorCurrentTarget) < 0.05; // Tolerance
+        return armAtTarget && elevatorAtTarget;
+    });
+}
   /* Scores the coral by moving arm down
    * This is a separate command because the arm needs to move down after the elevator has reached
    */
