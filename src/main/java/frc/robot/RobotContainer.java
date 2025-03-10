@@ -18,7 +18,10 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.simulation.JoystickSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.Constants.AlgaeSubsystemConstant;
+import frc.robot.Constants.AlgaeSubsystemConstants;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.CoralSubsystemConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ElevatorSubsystemconstant;
 import frc.robot.Constants.OIConstants;
@@ -61,23 +64,24 @@ public class RobotContainer {
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   
-  // The driver's controller
-XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
-XboxController m_operatorController = new XboxController(OIConstants.k0pControllerPort);
-  private final JoystickButton resetheading = new JoystickButton(m_driveController, XboxController.Button.kB.value);
-  private final JoystickButton m_liftB = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
+  //Controller Initialization
+  XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController m_operatorController = new XboxController(OIConstants.k0pControllerPort);
+
+  // The operator's controller
   private final JoystickButton m_liftX = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
   private final JoystickButton m_liftY=  new JoystickButton(m_operatorController, XboxController.Button.kY.value);
+  private final JoystickButton m_liftB = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
   private final JoystickButton m_liftA=  new JoystickButton(m_operatorController, XboxController.Button.kA.value);
-  private final JoystickButton m_up = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton m_down = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
-  private final JoystickButton m_stop = new JoystickButton(m_operatorController,XboxController.Button.kA.value);
-  private final JoystickButton m_armUp = new JoystickButton(m_operatorController, XboxController.Button.kStart.value);
-  private final JoystickButton m_armDown = new JoystickButton(m_operatorController, XboxController.Button.kBack.value);
+
+  private final JoystickButton m_Level3DEAL = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton m_Level2DEAL = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);  
+
+  // The driver's controller
+  private final JoystickButton resetheading = new JoystickButton(m_driveController, XboxController.Button.kB.value);
   private final JoystickButton resetCoral = new JoystickButton(m_driveController, XboxController.Button.kStart.value);
-  private final JoystickButton m_pivotIntake = new JoystickButton(m_driveController, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton m_pivotOutake = new JoystickButton(m_driveController, XboxController.Button.kRightBumper.value);
- // private final  = new JoystickTrigger(m_driveController, XboxController.Button.kRightTrigger.value);
+  private final JoystickButton m_pivotIntake = new JoystickButton(m_driveController, XboxController.Button.kRightBumper.value);
+  private final JoystickButton m_algaeScore = new JoystickButton(m_driveController, XboxController.Button.kLeftBumper.value);
 
   // Auto chooser
   private SendableChooser<Command> autoChooser;
@@ -122,10 +126,7 @@ XboxController m_operatorController = new XboxController(OIConstants.k0pControll
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
 // Set the ball intake to in/out when not running based on internal state
-    m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.idleCommand());
-    
-
-    
+    m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.idleCommand()); 
   }
 
   /**
@@ -144,36 +145,18 @@ XboxController m_operatorController = new XboxController(OIConstants.k0pControll
             m_robotDrive));*/
     resetheading.onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(),m_robotDrive));
 
-  //Motor Button X and y Control
- m_up
-    .whileTrue(new InstantCommand(() -> m_coralSubSystem.setLiftSpeed(ElevatorSubsystemconstant.KDefualtMotorspeed)));
-    m_up
-    .onFalse(new InstantCommand(() -> m_coralSubSystem.setLiftSpeed(0)));    
+  //Motor Button X and y Control 
+m_Level2DEAL
+    .onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel2DEAL));
+m_Level3DEAL
+    .onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel3DEAL));
+    
 
-m_down
-    .whileTrue(new InstantCommand(() -> m_coralSubSystem.setLiftSpeed(-0.5)));
 
-m_down .onFalse(new InstantCommand(() -> m_coralSubSystem.setLiftSpeed(0)));
-
-m_stop
-    .onTrue(new InstantCommand(() -> m_coralSubSystem.setLiftSpeed(0))); //TEMPORARY, NEED TO FIND A NEW BUTTON
-m_armUp
-    .whileTrue(new InstantCommand(() -> m_coralSubSystem.setArmSpeed(0.1)));
-m_armUp
-    .onFalse(new InstantCommand(() -> m_coralSubSystem.setArmSpeed(0)));    
-
-m_armDown
-    .whileTrue(new InstantCommand(() -> m_coralSubSystem.setArmSpeed(-0.1)));
-m_armDown
-    .onFalse(new InstantCommand(() -> m_coralSubSystem.setArmSpeed(0))); 
 m_pivotIntake
-    .whileTrue(new InstantCommand(() -> m_algaeSubsystem.setPivotSpeed(0.1)));
-m_pivotIntake
-    .onFalse(new InstantCommand(() -> m_algaeSubsystem.setPivotSpeed(0)));
-m_pivotOutake
-    .whileTrue(new InstantCommand(() -> m_algaeSubsystem.setPivotSpeed(-0.1)));
-m_pivotOutake
-    .onFalse(new InstantCommand(() -> m_algaeSubsystem.setPivotSpeed(0)));
+    //.onTrue(new InstantCommand(() -> m_algaeSubsystem.setIntakePosition(Constants.AlgaeSubsystemConstants.IntakeSetpoints.kForward))); //NEEDS TUNING
+    .onTrue(m_algaeSubsystem.runIntakeCommand());
+
     
     //algaesubsystem set point intke
 /*m_pivotIntake.onTrue(m_algaeSubsystem.runIntakeCommand());
@@ -186,19 +169,16 @@ m_pivotOutake.onTrue(m_algaeSubsystem.reverseIntakeCommand());
     // when idle
      
     m_liftB
-        .onTrue(
-            m_coralSubSystem
-                .setSetpointCommand(Setpoint.kLevel1)
-        );
+        .onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel2));
                // .alongWith(m_algaeSubsystem.stowCommand()));  -- remove
 
     //GOAL: Merge setpoitns into 1 button, selectable level through a selector in smartdashboard
     //Get to a point where we can access all 4 levels with 
     // A Button -> Elevator/Arm to level 2 position
-    m_liftA.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel3));
+    m_liftA.onTrue(m_coralSubSystem.pickupCoralCommand());
 
     // X Button -> Elevator/Arm to level 3 position (BUTTON WE ARE USING THIS FOR SETPOINTS)
-    m_liftX.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel2));
+    m_liftX.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel3));
 
     // Y Button -> Elevator/Arm to level 4 position
     m_liftY.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel4));
@@ -206,9 +186,9 @@ m_pivotOutake.onTrue(m_algaeSubsystem.reverseIntakeCommand());
     resetCoral.onTrue (new InstantCommand(() -> m_coralSubSystem.resetCoral()));
     m_coralSubSystem.resetCoral();
 
+    m_algaeScore.onTrue(m_algaeSubsystem.scoreAlgae());
 
-
-
+ //Driver trigger controls
  // Right Trigger -> Run ball intake, set to leave out when idle
  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
      m_driverController
@@ -219,22 +199,30 @@ m_pivotOutake.onTrue(m_algaeSubsystem.reverseIntakeCommand());
      m_driverController
         .leftTrigger(OIConstants.kTriggerButtonThreshold)
         .whileTrue(m_algaeSubsystem.reverseIntakeCommand());
+    
+    m_driverController
+        .rightTrigger(OIConstants.kTriggerButtonThreshold)
+        .whileTrue(new InstantCommand(() -> m_algaeSubsystem.setIntakePower(AlgaeSubsystemConstants.IntakeSetpoints.kReverse)));
 
+//Operator trigger controls
 
-        
+CommandXboxController m_operatorController = new CommandXboxController(OIConstants.k0pControllerPort);
     
     /**
      * POV is a direction on the D-Pad or directional arrow pad of the controller,
      * the direction of this will be different depending on how your winch is wound
      */
+
+    //Driver controller DPAD
     m_driverController.pov(0).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(Constants.ClimberConstants.CLIMBER_SPEED_UP)));
     m_driverController.pov(0).onFalse(new InstantCommand(() ->m_climberSubsystem.runClimber(0.0)));
     m_driverController.pov(180).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(Constants.ClimberConstants.CLIMBER_SPEED_DOWN)));
     m_driverController.pov(180).onFalse(new InstantCommand(() ->m_climberSubsystem.runClimber(0.0)));
-    CommandXboxController m_operatorController = new CommandXboxController(OIConstants.k0pControllerPort);
-     m_operatorController.pov(90).whileTrue(m_coralSubSystem.scoreCoralCommand());
-     m_operatorController.pov(180).whileTrue(m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kIntake));
-     m_operatorController.pov(0).whileTrue(m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kFeederStation));
+
+    //Operator Controller DPAD
+     m_operatorController.pov(90).onTrue(m_coralSubSystem.scoreCoralCommand());
+     m_operatorController.pov(0).onTrue(m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kFeederStation));
+     m_operatorController.pov(180).onTrue(m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kIntake));
   }
 
   /**

@@ -138,6 +138,17 @@ public class AlgaeSubsystem extends SubsystemBase {
         });
   }
 
+  //Intermediate position to drive and hold algae
+  public Command scoreAlgae(){
+    return this.run(
+      () -> {
+        stowWhenIdle = false;
+        setIntakePower(AlgaeSubsystemConstants.IntakeSetpoints.kHold);
+        setIntakePosition(AlgaeSubsystemConstants.ArmSetpoints.kHold);
+      }
+    );
+  }
+
   /**
    * Command to run the algae intake in reverse. This will extend the arm to its "hold" position and
    * run the motor at its "reverse" power to eject the ball.
@@ -149,7 +160,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         () -> {
           stowWhenIdle = true;
           setIntakePower(AlgaeSubsystemConstants.IntakeSetpoints.kReverse);
-          setIntakePosition(AlgaeSubsystemConstants.ArmSetpoints.kHold);
+          setIntakePosition(AlgaeSubsystemConstants.ArmSetpoints.kStow);
         });
   }
 
@@ -181,15 +192,16 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   /** Set the intake motor power in the range of [-1, 1]. */
-  private void setIntakePower(double power) {
+  public void setIntakePower(double power) {
     intakeMotor.set(power);
   }
   public void setPivotSpeed(double power) {
     armMotor.set(power);
   }
   /** Set the arm motor position. This will use closed loop position control. */
-  private void setIntakePosition(double position) {
+  public void setIntakePosition(double position) {
    //HACK armController.setReference(position, ControlType.kPosition);
+   armController.setReference(position, ControlType.kPosition);
   }
 
   @Override

@@ -108,11 +108,14 @@ public final class Constants {
   }
   public final class ElevatorSubsystemconstant {
     public static final double KDefualtMotorspeed = 0.5;
+    public static final double KManualMotorSpeed = 0.5;
     public static final int ElevatorSubsystemCanId = 48;
   }
   public static final class CoralSubsystemConstants {
     public static final int kElevatorMotorCanId = 4;
     public static final int kArmMotorCanId = 3;
+    public static final double KDefualtMotorspeed = 0.1;
+    public static final double KManualMotorSpeed = 0.1;
     public static final int kFunnelMotorCanId = 9;
     public static final int FUNNEL_MOTOR_CURRENT_LIMIT = 10;
     public static final double FUNNEL_MOTOR_VOLTAGE_COMP = 12;
@@ -123,15 +126,18 @@ public final class Constants {
     public static final class ElevatorSetpoints {
       public static final int kIntake = 0;
       //we need to change with the funnel
-      public static final int kFeederStation = 45;
+      public static final int kFeederStation = 55; //Was 45
       public static final int kLevel1 = 30;
       public static final int kLevel2 = 15; //Was 30
-      public static final int kLevel3 = 150; //Was 165
+      public static final int kLevel2DEAL = 200; //TODO: UNTESTED
+      public static final int kLevel3 = 110; //Was 150
+      public static final int kLevel3DEAL = 335; //TODO: UNTESTED
       public static final int kLevel4 = 381;
     }
 
     public static final class ArmSetpoints {
       public static final double kIntake = 0.24;
+      public static final double kArmDEAL = 0.48; //TODO:UNTESTED 
       public static final double kFeederStation = 0.24;
       public static final double kLevel1 = 0.24;
       public static final double kLevel2 = 0.69; //Was 0.63
@@ -149,15 +155,15 @@ public final class Constants {
     public static final int kPivotMotorCanId = 5;
 
     public static final class ArmSetpoints {
-      public static final double kStow = 18.5;
-      public static final double kHold = 11.5;
-      public static final double kDown = 0;
+      public static final double kStow = 0.02; //STARTING CONFIG
+      public static final double kHold = 2.2; //Was 5
+      public static final double kDown = 8;
     }
 
     public static final class IntakeSetpoints {
       public static final double kForward = 0.8;
       public static final double kReverse = -0.8;
-      public static final double kHold = 0.25;
+      public static final double kHold = 0; //Was 0.25
     }
   }
 

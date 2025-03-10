@@ -22,7 +22,9 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Configs;
 import frc.robot.Constants.CoralSubsystemConstants;
 import frc.robot.Constants.CoralSubsystemConstants.ArmSetpoints;
@@ -40,7 +42,9 @@ public class CoralSubsystem extends SubsystemBase {
     kFeederStation,
     kLevel1,
     kLevel2,
+    kLevel2DEAL,
     kLevel3,
+    kLevel3DEAL,
     kLevel4;
   }
 
@@ -243,7 +247,13 @@ public class CoralSubsystem extends SubsystemBase {
               armCurrentTarget = ArmSetpoints.kLevel4;
               elevatorCurrentTarget = ElevatorSetpoints.kLevel4;
               break;
-            
+            case kLevel2DEAL:
+              armCurrentTarget = ArmSetpoints.kArmDEAL;
+              elevatorCurrentTarget = ElevatorSetpoints.kLevel2DEAL;
+              break;
+            case kLevel3DEAL:
+              armCurrentTarget = ArmSetpoints.kArmDEAL;
+              elevatorCurrentTarget = ElevatorSetpoints.kLevel3DEAL;
           }
           lastSetpoint = setpoint; // retain the last setpoint for scoring arm down
         });
@@ -274,12 +284,26 @@ public class CoralSubsystem extends SubsystemBase {
             break;
           case kLevel4:
             if (armCurrentTarget == ArmSetpoints.kLevel4) {
-              armCurrentTarget = ArmSetpoints.kLevel4 - arm_delta4;
+              armCurrentTarget = ArmSetpoints.kLevel4 - arm_delta4; 
             }
             break;
+          
         }
       });
 
+  }
+
+  //This Command will allow the operator to pickup coral with one button
+  //UNTESTED
+  public Command pickupCoralCommand(){
+    return this.runOnce(
+      () -> {
+        Double waitInt = 2.0;
+        setSetpointCommand(CoralSubsystem.Setpoint.kIntake);
+        new WaitCommand(waitInt);
+        setSetpointCommand(CoralSubsystem.Setpoint.kFeederStation);
+      }
+    );
   }
 
     /**
