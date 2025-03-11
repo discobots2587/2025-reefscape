@@ -298,9 +298,9 @@ public class CoralSubsystem extends SubsystemBase {
   public Command pickupCoralCommand(){
     return this.runOnce(
       () -> {
-        Double waitInt = 2.0;
+        Double waitDouble = 2.0;
         setSetpointCommand(CoralSubsystem.Setpoint.kIntake);
-        new WaitCommand(waitInt);
+        Commands.waitSeconds(waitDouble);
         setSetpointCommand(CoralSubsystem.Setpoint.kFeederStation);
       }
     );

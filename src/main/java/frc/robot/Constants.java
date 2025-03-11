@@ -107,7 +107,7 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
   public final class ElevatorSubsystemconstant {
-    public static final double KDefualtMotorspeed = 0.5;
+    public static final double KDefualtMotorspeed = 0.75;
     public static final double KManualMotorSpeed = 0.5;
     public static final int ElevatorSubsystemCanId = 48;
   }
