@@ -1,6 +1,13 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
+
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import org.photonvision.PhotonCamera;
+
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.sim.SparkFlexSim;
 import com.revrobotics.sim.SparkLimitSwitchSim;
@@ -30,7 +37,11 @@ import frc.robot.Constants.CoralSubsystemConstants.ElevatorSetpoints;
 import frc.robot.Constants.CoralSubsystemConstants.IntakeSetpoints;
 import frc.robot.Constants.SimulationRobotConstants;
 import frc.robot.Constants.ElevatorSubsystemconstant;
-
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
+import static java.util.stream.Collectors.toUnmodifiableSet;
+import java.util.Set;
+import java.util.stream.Stream;
 
 
 public class CoralSubsystem extends SubsystemBase {
@@ -45,6 +56,10 @@ public class CoralSubsystem extends SubsystemBase {
   }
 
   public Setpoint lastSetpoint = Setpoint.kIntake; // keep track of level to help with scoring arm down
+    // ID of the tags on the reef
+  private static final Set<Integer> FIDUCIAL_IDS = Stream.of(17, 18, 19, 20, 21, 22, 6, 7, 8, 9, 10, 11)
+      .collect(toUnmodifiableSet());
+
   // Initialize arm SPARK. We will use MAXMotion position control for the arm, so we also need to
   // initialize the closed loop controller and encoder.
   private SparkMax armMotor =
@@ -125,7 +140,8 @@ public class CoralSubsystem extends SubsystemBase {
               "Arm",
               SimulationRobotConstants.kArmLength * SimulationRobotConstants.kPixelsPerMeter,
               180 - Units.radiansToDegrees(SimulationRobotConstants.kMinAngleRads) - 90));
-
+  public final  PhotonCamera cameraL = new PhotonCamera("FrontL");
+  public final  PhotonCamera cameraR = new PhotonCamera("FrontR");
 
 
   public CoralSubsystem() { 
@@ -347,11 +363,14 @@ public class CoralSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Coral/Elevator/Target Position", elevatorCurrentTarget);
     SmartDashboard.putNumber("Coral/Elevator/Actual Position", elevatorEncoder.getPosition());
     SmartDashboard.putNumber("Coral/Intake/Applied Output", intakeMotor.getAppliedOutput());
+  
     if ( elevatorMotor.getReverseLimitSwitch().isPressed()) {
       SmartDashboard.putNumber("Coral/Elevator/Down", 1);
     } else {
       SmartDashboard.putNumber("Coral/Elevator/Down", 0);
     }
+    updateCameraPositions(cameraL);
+    updateCameraPositions(cameraR);
 
 
     // Update mechanism2d
@@ -403,5 +422,24 @@ public class CoralSubsystem extends SubsystemBase {
         RobotController.getBatteryVoltage(),
         0.02);
     // SimBattery is updated in Robot.java
+  }
+  public void updateCameraPositions(PhotonCamera photonCamera) {
+    
+    var photoResults = photonCamera.getAllUnreadResults();
+    var lastTagResult = photoResults.stream()
+        .filter(result -> result.hasTargets())
+        .flatMap(result -> result.getTargets().stream())
+        .filter(target -> FIDUCIAL_IDS.contains(target.getFiducialId()))
+        .findFirst();
+
+    if (lastTagResult.isPresent()) {
+      var tag = lastTagResult.get();
+      var cameraToTarget = tag.bestCameraToTarget;
+      double yValue = cameraToTarget.getY();
+      double xValue = cameraToTarget.getX();
+      SmartDashboard.putNumber("Coral/cameraL/getY", yValue);
+      SmartDashboard.putNumber("Coral/camera/getX", xValue);
+
+    }
   }
 }
