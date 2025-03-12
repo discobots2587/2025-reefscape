@@ -107,7 +107,7 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
   public final class ElevatorSubsystemconstant {
-    public static final double KDefualtMotorspeed = 0.75;
+    public static final double KDefualtMotorspeed = 0.85;
     public static final double KManualMotorSpeed = 0.5;
     public static final int ElevatorSubsystemCanId = 48;
   }
@@ -126,13 +126,13 @@ public final class Constants {
     public static final class ElevatorSetpoints {
       public static final int kIntake = 0;
       //we need to change with the funnel
-      public static final int kFeederStation = 55; //Was 45
-      public static final int kLevel1 = 30;
-      public static final int kLevel2 = 15; //Was 30
-      public static final int kLevel2DEAL = 200; //TODO: UNTESTED
-      public static final int kLevel3 = 110; //Was 150
-      public static final int kLevel3DEAL = 335; //TODO: UNTESTED
-      public static final int kLevel4 = 381;
+      public static final int kFeederStation = 55/5; //Was 45
+      public static final int kLevel1 = 30/5;
+      public static final int kLevel2 = 15/5; //Was 30
+      public static final int kLevel2DEAL = 220/5; //TODO: UNTESTED
+      public static final int kLevel3 = 110/5; //Was 150
+      public static final int kLevel3DEAL = 385/5; //TODO: UNTESTED
+      public static final int kLevel4 = 381/5;
     }
 
     public static final class ArmSetpoints {
@@ -142,7 +142,7 @@ public final class Constants {
       public static final double kLevel1 = 0.24;
       public static final double kLevel2 = 0.69; //Was 0.63
       public static final double kLevel3 = 0.72; //Was 0.69
-      public static final double kLevel4 = 0.69;
+      public static final double kLevel4 = 0.72; //Was 0.69
     }
 
     public static final class IntakeSetpoints {
@@ -155,7 +155,7 @@ public final class Constants {
     public static final int kPivotMotorCanId = 5;
 
     public static final class ArmSetpoints {
-      public static final double kStow = 0.02; //STARTING CONFIG
+      public static final double kStow = 0.01; //STARTING CONFIG
       public static final double kHold = 2.2; //Was 5
       public static final double kDown = 8;
     }

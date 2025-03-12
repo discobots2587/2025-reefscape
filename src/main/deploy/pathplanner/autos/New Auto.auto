@@ -5,15 +5,65 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "sequential",
           "data": {
-            "pathName": "testauto"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "scoreL3"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intakeCoral"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "liftl4"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 7.0
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "testauto"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "scoreCoral"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "testautoback"
+                }
+              }
+            ]
           }
         }
       ]

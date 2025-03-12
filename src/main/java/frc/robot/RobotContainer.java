@@ -49,7 +49,7 @@ import frc.robot.subsystems.CoralSubsystem.Setpoint;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
+import frc.robot.commands.scoreL3test;
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -83,16 +83,35 @@ public class RobotContainer {
   private final JoystickButton m_pivotIntake = new JoystickButton(m_driveController, XboxController.Button.kRightBumper.value);
   private final JoystickButton m_algaeScore = new JoystickButton(m_driveController, XboxController.Button.kLeftBumper.value);
 
-  // Auto chooser
-  private SendableChooser<Command> autoChooser;
 
+ private SendableChooser<Command> autoChooser;
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+        // Build an auto chooser. This will use Commands.none() as the default option.
+    //
+    
+
+    // Register Named Commands
+    NamedCommands.registerCommand("liftL3", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kLevel3));
+    NamedCommands.registerCommand("intakeCoral", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kFeederStation));
+    NamedCommands.registerCommand("scoreCoral", m_coralSubSystem.scoreCoralCommand());
+    NamedCommands.registerCommand("liftl4", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kLevel4));
+    NamedCommands.registerCommand("liftl0", new InstantCommand(() -> System.out.println("lift level 0")));
+    NamedCommands.registerCommand("armscore", new InstantCommand(() -> System.out.println("lower arm to reef")));
+    NamedCommands.registerCommand("reverse", new InstantCommand(() -> System.out.println("reverse from reef")));
+
+    // Auto chooser
+    
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+
     // Change this to match the name of your camera
-    PhotonCamera cameraL = new PhotonCamera("FrontL");
-    PhotonCamera cameraR = new PhotonCamera("FrontR");
+    //PhotonCamera cameraL = new PhotonCamera("FrontL");
+    //PhotonCamera cameraR = new PhotonCamera("FrontR");
     // Configure the button bindings
     configureButtonBindings();
 
@@ -107,23 +126,6 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driveController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
-    // Build an auto chooser. This will use Commands.none() as the default option.
-    //
-    autoChooser = AutoBuilder.buildAutoChooser();
-
-    // Register Named Commands
-    NamedCommands.registerCommand("scoreL3", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kLevel3));
-    NamedCommands.registerCommand("intakecoral", new InstantCommand(() -> System.out.println("Intake coral")));
-    NamedCommands.registerCommand("leaveZone", new InstantCommand(() -> System.out.println("Leave Starting Zone")));
-    NamedCommands.registerCommand("liftl4", new InstantCommand(() -> System.out.println("lift level 4")));
-    NamedCommands.registerCommand("liftl0", new InstantCommand(() -> System.out.println("lift level 0")));
-    NamedCommands.registerCommand("armscore", new InstantCommand(() -> System.out.println("lower arm to reef")));
-    NamedCommands.registerCommand("reverse", new InstantCommand(() -> System.out.println("reverse from reef")));
-
-
-
-
-    SmartDashboard.putData("Auto Chooser", autoChooser);
 
 // Set the ball intake to in/out when not running based on internal state
     m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.idleCommand()); 

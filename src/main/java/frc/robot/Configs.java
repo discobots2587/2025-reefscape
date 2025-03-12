@@ -116,7 +116,8 @@ public final class Configs {
           .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
           // Set PID values for position control
           .p(0.1)
-          .outputRange(-1, 1)
+          .d(0.5)
+          .outputRange(-.15, .2)
           .maxMotion
           // Set MAXMotion parameters for position control
           .maxVelocity(4200)
@@ -139,7 +140,7 @@ public final class Configs {
 
     static {
       // Configure basic setting of the arm motor
-      armConfig.smartCurrentLimit(25);
+      armConfig.smartCurrentLimit(20);
       armConfig.idleMode(IdleMode.kBrake);
       /*
        * Configure the closed loop controller. We want to make sure we set the
