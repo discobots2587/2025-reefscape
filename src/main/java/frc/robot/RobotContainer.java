@@ -204,7 +204,8 @@ m_pivotOutake.onTrue(m_algaeSubsystem.reverseIntakeCommand());
     
     m_driverController
         .rightTrigger(OIConstants.kTriggerButtonThreshold)
-        .whileTrue(new InstantCommand(() -> m_algaeSubsystem.setIntakePower(AlgaeSubsystemConstants.IntakeSetpoints.kReverse)));
+        .whileTrue(m_algaeSubsystem.reverseIntakeCommand());
+        //.whileTrue(new InstantCommand(() -> m_algaeSubsystem.setIntakePower(AlgaeSubsystemConstants.IntakeSetpoints.kReverse)));
 
 //Operator trigger controls
 

@@ -126,13 +126,13 @@ public final class Constants {
     public static final class ElevatorSetpoints {
       public static final int kIntake = 0;
       //we need to change with the funnel
-      public static final int kFeederStation = 55/5; //Was 45
-      public static final int kLevel1 = 30/5;
-      public static final int kLevel2 = 15/5; //Was 30
-      public static final int kLevel2DEAL = 220/5; //TODO: UNTESTED
-      public static final int kLevel3 = 110/5; //Was 150
-      public static final int kLevel3DEAL = 385/5; //TODO: UNTESTED
-      public static final int kLevel4 = 381/5;
+      public static final int kFeederStation = 55/3; //Was 45
+      public static final int kLevel1 = 30/3;
+      public static final int kLevel2 = 15/3; //Was 30
+      public static final int kLevel2DEAL = 220/3; //TODO: UNTESTED
+      public static final int kLevel3 = 110/3; //Was 150
+      public static final int kLevel3DEAL = 385/3; //TODO: UNTESTED
+      public static final int kLevel4 = 381/3;
     }
 
     public static final class ArmSetpoints {
@@ -156,8 +156,8 @@ public final class Constants {
 
     public static final class ArmSetpoints {
       public static final double kStow = 0.01; //STARTING CONFIG
-      public static final double kHold = 2.2; //Was 5
-      public static final double kDown = 8;
+      public static final double kHold = 1; //Was 5
+      public static final double kDown = 1.8;
     }
 
     public static final class IntakeSetpoints {

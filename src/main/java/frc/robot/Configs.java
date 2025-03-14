@@ -115,13 +115,13 @@ public final class Configs {
           .closedLoop
           .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
           // Set PID values for position control
-          .p(0.1)
-          .d(0.5)
-          .outputRange(-.15, .2)
+          .p(0.2)
+          .d(0.45)
+          .outputRange(-.3, .5)
           .maxMotion
           // Set MAXMotion parameters for position control
-          .maxVelocity(4200)
-          .maxAcceleration(6000)
+          .maxVelocity(3000) //Was 4200
+          .maxAcceleration(1500) //Was 6000
           .allowedClosedLoopError(0.05);
       } else {
         elevatorConfig
