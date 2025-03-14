@@ -393,17 +393,28 @@ public class CoralSubsystem extends SubsystemBase {
     Transform3d cameraLeft = updateCameraPositions(cameraL);
     SmartDashboard.putNumber("Coral/cameraL/getY", cameraLeft.getY());
     SmartDashboard.putNumber("Coral/cameraL/getX", cameraLeft.getX());
-  }
-   /*  boolean scoreL = false;
-    Transform3d cameraRight = updateCameraPositions(cameraR);8/
+  
+    
+    Transform3d cameraRight = updateCameraPositions(cameraR);
 
+    
     SmartDashboard.putNumber("Coral/cameraR/getY", cameraRight.getY());
     SmartDashboard.putNumber("Coral/cameraR/getX", cameraRight.getX());
+    boolean scoreR = false , scoreL = false;
+    if (cameraLeft.getY() > -.09 && cameraLeft.getY() < -.02) {
+      scoreR = true;
+    }
+    if (cameraRight.getY() < .09 && cameraRight.getY() > .02) {
+      scoreL = true;
+    }
+    SmartDashboard.putBoolean ("Coral/cameraR/scoreR", scoreR);
+    SmartDashboard.putBoolean ("Coral/cameraL/scoreL", scoreL);
+
     // todo add test for getX values for scoring on left or right branch
     
     // todo add camera to target threshold values for scoring at different levels
 
-
+  /* 
     // Update mechanism2d
     m_elevatorMech2d.setLength(
         SimulationRobotConstants.kPixelsPerMeter * SimulationRobotConstants.kMinElevatorHeightMeters
@@ -417,7 +428,7 @@ public class CoralSubsystem extends SubsystemBase {
                 + Units.rotationsToDegrees(
                     armEncoder.getPosition() / SimulationRobotConstants.kArmReduction))
             - 90 // subtract 90 degrees to account for the elevator
-        );
+        );*/
   }
 
   /** Get the current drawn by each simulation physics model */
