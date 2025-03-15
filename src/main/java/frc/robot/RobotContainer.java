@@ -98,6 +98,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakeCoral", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kFeederStation));
     NamedCommands.registerCommand("scoreCoral", m_coralSubSystem.scoreCoralCommand());
     NamedCommands.registerCommand("liftl4", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kLevel4));
+
+
     NamedCommands.registerCommand("liftl0", new InstantCommand(() -> System.out.println("lift level 0")));
     NamedCommands.registerCommand("armscore", new InstantCommand(() -> System.out.println("lower arm to reef")));
     NamedCommands.registerCommand("reverse", new InstantCommand(() -> System.out.println("reverse from reef")));

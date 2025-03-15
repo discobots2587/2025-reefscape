@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.5784983422979515,
+        "y": 7.265046115866037
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.801743242591784,
+        "y": 7.075750474723996
+      },
+      "isLocked": false,
+      "linkedName": "BLeftStart"
+    },
+    {
+      "anchor": {
+        "x": 3.9732059193382105,
+        "y": 5.245107690554826
+      },
+      "prevControl": {
+        "x": 3.9470491776351975,
+        "y": 5.493735574878933
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "BReefPosK"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.5,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -59.99999999999999
+  },
+  "reversed": false,
+  "folder": "Left Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": false
+}
