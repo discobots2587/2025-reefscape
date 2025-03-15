@@ -156,8 +156,8 @@ public final class Constants {
 
     public static final class ArmSetpoints {
       public static final double kStow = 0.01; //STARTING CONFIG
-      public static final double kHold = 1; //Was 5
-      public static final double kDown = 1.8;
+      public static final double kHold = 5; //Was 5
+      public static final double kDown = 10.9;
     }
 
     public static final class IntakeSetpoints {

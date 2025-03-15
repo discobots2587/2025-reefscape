@@ -116,12 +116,13 @@ public final class Configs {
           .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
           // Set PID values for position control
           .p(0.2)
-          .d(0.45)
-          .outputRange(-.3, .5)
+          //.i(0.01)
+          .d(0.65)
+          .outputRange(-.25, .5)
           .maxMotion
           // Set MAXMotion parameters for position control
-          .maxVelocity(3000) //Was 4200
-          .maxAcceleration(1500) //Was 6000
+          .maxVelocity(2000)
+          .maxAcceleration(1500)
           .allowedClosedLoopError(0.05);
       } else {
         elevatorConfig
@@ -152,7 +153,7 @@ public final class Configs {
           // Set PID values for position control. We don't need to pass a closed
           // loop slot, as it will default to slot 0.
           .p(0.1)
-          .outputRange(-.1, 0.1);
+          .outputRange(-.15, 0.25);
         
       // Configure basic settings of the intake motor
       intakeConfig.inverted(true).idleMode(IdleMode.kBrake).smartCurrentLimit(20);
