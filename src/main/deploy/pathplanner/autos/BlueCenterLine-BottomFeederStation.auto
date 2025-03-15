@@ -29,7 +29,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BlueLeft-BlueReefK"
+                  "pathName": "BlueCenterBarge-BlueReefG"
                 }
               }
             ]
@@ -38,7 +38,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 0.75
           }
         },
         {
@@ -48,19 +48,25 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "intakecoral"
+                  "pathName": "BlueReefG-BottomFeederStation"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "BlueReefK-Top Feeder"
+                  "name": "intakecoral"
                 }
               }
             ]
@@ -70,6 +76,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Left Autos",
+  "folder": "CenterBarge Autos",
   "choreoAuto": false
 }

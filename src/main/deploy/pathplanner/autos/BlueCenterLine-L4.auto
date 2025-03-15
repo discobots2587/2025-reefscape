@@ -17,50 +17,37 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "liftl4"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "BlueLeft-BlueReefK"
-                }
-              }
-            ]
+            "name": "liftl4"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 3.0
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "scoreCoral"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "intakecoral"
+                  "pathName": "BlueCenterBarge-BlueReefG"
                 }
               },
               {
-                "type": "path",
+                "type": "wait",
                 "data": {
-                  "pathName": "BlueReefK-Top Feeder"
+                  "waitTime": 1.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "scoreCoral"
                 }
               }
             ]
@@ -70,6 +57,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Left Autos",
+  "folder": "CenterBarge Autos",
   "choreoAuto": false
 }

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 9.966827547728982,
-        "y": 2.9879016356176735
+        "x": 1.1269263698630136,
+        "y": 1.0724529109589036
       },
       "prevControl": null,
       "nextControl": {
-        "x": 10.406247577170195,
-        "y": 4.664907456160047
+        "x": 1.968364726027397,
+        "y": 1.598351883561644
       },
       "isLocked": false,
-      "linkedName": "RRightStart"
+      "linkedName": "BBottomFeederStation"
     },
     {
       "anchor": {
-        "x": 12.479200819676459,
-        "y": 6.5364241803285985
+        "x": 3.9667808219178085,
+        "y": 2.8004066780821915
       },
       "prevControl": {
-        "x": 12.095594262294638,
-        "y": 6.656301229509052
+        "x": 2.6595462328767123,
+        "y": 2.124250856164383
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BReefPosD"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "Right Paths",
+  "folder": "CenterLine Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 53.74616226255522
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

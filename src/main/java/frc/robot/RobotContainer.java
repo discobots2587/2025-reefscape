@@ -96,7 +96,7 @@ public class RobotContainer {
     // Register Named Commands
     NamedCommands.registerCommand("liftL3", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kLevel3));
     NamedCommands.registerCommand("intakeCoral", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kFeederStation));
-    NamedCommands.registerCommand("scoreCoral", m_coralSubSystem.scoreCoralCommand());
+    NamedCommands.registerCommand("scorecoral", m_coralSubSystem.scoreCoralCommand());
     NamedCommands.registerCommand("liftl4", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kLevel4));
 
 

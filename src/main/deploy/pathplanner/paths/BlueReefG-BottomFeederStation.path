@@ -1,0 +1,84 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.829965753424658,
+        "y": 4.16
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.362585616438356,
+        "y": 4.212821061643836
+      },
+      "isLocked": false,
+      "linkedName": "BReefG"
+    },
+    {
+      "anchor": {
+        "x": 5.829965753424658,
+        "y": 1.8087114726027391
+      },
+      "prevControl": {
+        "x": 7.467765410958903,
+        "y": 4.062564212328767
+      },
+      "nextControl": {
+        "x": 5.390625120410346,
+        "y": 1.2041142712068962
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.1269263698630136,
+        "y": 1.0724529109589036
+      },
+      "prevControl": {
+        "x": 2.839854452054797,
+        "y": 1.252761130136986
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "BBottomFeederStation"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.8,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 53.74616226255522
+  },
+  "reversed": false,
+  "folder": "CenterLine Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": false
+}

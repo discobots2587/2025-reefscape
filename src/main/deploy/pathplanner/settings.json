@@ -4,6 +4,7 @@
   "holonomicMode": true,
   "pathFolders": [
     "Center Paths",
+    "CenterLine Paths",
     "Left Paths",
     "Right Paths",
     "reef-coral"
@@ -11,9 +12,10 @@
   "autoFolders": [
     "Center Autos",
     "Left Autos",
+    "CenterBarge Autos",
     "Right Autos"
   ],
-  "defaultMaxVel": 3.0,
+  "defaultMaxVel": 2.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
