@@ -5,11 +5,13 @@
   "pathFolders": [
     "Center Paths",
     "Left Paths",
+    "Right Paths",
     "reef-coral"
   ],
   "autoFolders": [
     "Center Autos",
-    "Left Autos"
+    "Left Autos",
+    "Right Autos"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

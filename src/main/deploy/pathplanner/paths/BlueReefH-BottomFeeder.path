@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.5784983422979515,
-        "y": 7.265046115866037
+        "x": 5.816556439392673,
+        "y": 3.8410836162440076
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.849999999999999,
-        "y": 7.23171106557377
+        "x": 6.419292545870771,
+        "y": 1.9307805275765166
       },
       "isLocked": false,
-      "linkedName": "BLeftStart"
+      "linkedName": "BReefPosH"
     },
     {
       "anchor": {
-        "x": 3.512397540983606,
-        "y": 6.991956967213114
+        "x": 3.5104057395394745,
+        "y": 1.0066866526370166
       },
       "prevControl": {
-        "x": 3.0263544703311123,
-        "y": 6.962666950894182
+        "x": 4.724446191676861,
+        "y": 1.0066866526370164
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BBottomFeederStation"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -45,10 +45,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Left Paths",
+  "folder": "Right Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

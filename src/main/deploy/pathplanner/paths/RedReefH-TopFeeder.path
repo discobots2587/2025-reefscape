@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.5784983422979515,
-        "y": 7.265046115866037
+        "x": 11.735351595185689,
+        "y": 4.20166176947945
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.849999999999999,
-        "y": 7.23171106557377
+        "x": 10.934689475664115,
+        "y": 5.93060112881672
       },
       "isLocked": false,
-      "linkedName": "BLeftStart"
+      "linkedName": "RReefPosH"
     },
     {
       "anchor": {
-        "x": 3.512397540983606,
-        "y": 6.991956967213114
+        "x": 14.550708986296941,
+        "y": 7.1359409656963715
       },
       "prevControl": {
-        "x": 3.0263544703311123,
-        "y": 6.962666950894182
+        "x": 13.216284698200095,
+        "y": 7.289537205907547
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RTopFeeder"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
-  },
-  "reversed": false,
-  "folder": "Left Paths",
-  "idealStartingState": {
-    "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "reversed": false,
+  "folder": "Right Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": false
 }
