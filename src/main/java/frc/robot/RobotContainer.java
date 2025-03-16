@@ -14,6 +14,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.simulation.JoystickSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,6 +33,7 @@ import frc.robot.subsystems.CoralSubsystem.Setpoint;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -38,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
@@ -82,6 +86,10 @@ public class RobotContainer {
   private final JoystickButton resetCoral = new JoystickButton(m_driveController, XboxController.Button.kStart.value);
   private final JoystickButton m_pivotIntake = new JoystickButton(m_driveController, XboxController.Button.kRightBumper.value);
   private final JoystickButton m_algaeScore = new JoystickButton(m_driveController, XboxController.Button.kLeftBumper.value);
+
+
+ 
+  
 
 
  private SendableChooser<Command> autoChooser;

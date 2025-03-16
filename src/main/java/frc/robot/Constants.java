@@ -121,7 +121,7 @@ public final class Constants {
     public static final double FUNNEL_MOTOR_VOLTAGE_COMP = 12;
     public static final double FUNNEL_SPEED_DOWN = -0.1;
     public static final double FUNNEL_SPEED_UP = 0.1;
-   
+  
 
     public static final class ElevatorSetpoints {
       public static final int kIntake = 0;
@@ -144,6 +144,12 @@ public final class Constants {
       public static final double kLevel3 = 0.72; //Was 0.69
       public static final double kLevel4 = 0.72; //Was 0.69
     }
+    public static final class LEDModes {
+      public static final int kNone = 0;
+      public static final int kAlignL = 1;
+      public static final int kAlignR = 2;
+      public static final int kFeeder = 3;
+    } 
 
     public static final class IntakeSetpoints {
       public static final double kForward = 0.5;
