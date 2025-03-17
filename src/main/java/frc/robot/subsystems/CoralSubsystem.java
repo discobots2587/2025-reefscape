@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Configs;
+import frc.robot.Constants;
 import frc.robot.Constants.CoralSubsystemConstants;
 import frc.robot.Constants.CoralSubsystemConstants.ArmSetpoints;
 import frc.robot.Constants.CoralSubsystemConstants.ElevatorSetpoints;
@@ -76,8 +77,8 @@ public class CoralSubsystem extends SubsystemBase {
 
   // Initialize elevator SPARK. We will use MAXMotion position control for the elevator, so we also
   // need to initialize the closed loop controller and encoder.
-  private SparkFlex elevatorMotor =
-      new SparkFlex(51, MotorType.kBrushless);
+  private SparkMax elevatorMotor =
+      new SparkMax(Constants.CoralSubsystemConstants.kElevatorMotorCanId, MotorType.kBrushless); //Maybe use the constant???? TODO
   private SparkClosedLoopController elevatorClosedLoopController =
       elevatorMotor.getClosedLoopController();
   private RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
@@ -86,7 +87,7 @@ public class CoralSubsystem extends SubsystemBase {
   // Initialize intake SPARK. We will use open loop control for this so we don't need a closed loop
   // controller like above.
   private SparkMax intakeMotor =
-      new SparkMax(CoralSubsystemConstants.kFunnelMotorCanId, MotorType.kBrushless);
+      new SparkMax(59, MotorType.kBrushless); //What is happening here? TODO
 
   // Member variables for subsystem state management
   private boolean wasResetByButton = false;
@@ -98,8 +99,8 @@ public class CoralSubsystem extends SubsystemBase {
 
 
   // Simulation setup and variables
-  private DCMotor elevatorMotorModel = DCMotor.getNeoVortex(1);
-  private SparkFlexSim elevatorMotorSim;
+  private DCMotor elevatorMotorModel = DCMotor.getNEO(1);
+  private SparkMaxSim elevatorMotorSim;
   private SparkLimitSwitchSim elevatorLimitSwitchSim;
   private final ElevatorSim m_elevatorSim =
       new ElevatorSim(
@@ -187,7 +188,7 @@ public class CoralSubsystem extends SubsystemBase {
 
     
     // Initialize simulation values
-    elevatorMotorSim = new SparkFlexSim(elevatorMotor, elevatorMotorModel);
+    elevatorMotorSim = new SparkMaxSim(elevatorMotor, elevatorMotorModel);
     elevatorLimitSwitchSim = new SparkLimitSwitchSim(elevatorMotor, false);
     armMotorSim = new SparkMaxSim(armMotor, armMotorModel);
   }

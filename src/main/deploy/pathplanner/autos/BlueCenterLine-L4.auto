@@ -25,7 +25,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 2.0
           }
         },
         {
@@ -41,16 +41,34 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.0
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "scoreCoral"
+                  "waitTime": 2.0
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "scoreCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakecoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of BlueCendadgterBarge-BlueReefG"
           }
         }
       ]

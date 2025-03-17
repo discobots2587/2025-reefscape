@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 5.829965753424658,
-        "y": 4.16
+        "y": 4.1748463114754095
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.362585616438356,
-        "y": 4.212821061643836
+        "x": 7.362585616438354,
+        "y": 4.227667373119245
       },
       "isLocked": false,
       "linkedName": "BReefG"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 1.1269263698630136,
-        "y": 1.0724529109589036
+        "x": 0.7672131147540984,
+        "y": 0.6864241803278684
       },
       "prevControl": {
-        "x": 2.839854452054797,
-        "y": 1.252761130136986
+        "x": 2.4801411969458815,
+        "y": 0.866732399505951
       },
       "nextControl": null,
       "isLocked": false,
@@ -63,7 +63,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 2.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

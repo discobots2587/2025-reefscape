@@ -31,6 +31,7 @@ import frc.robot.subsystems.CoralSubsystem.Setpoint;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.funnelSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -38,6 +39,8 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+
+import javax.security.auth.login.FailedLoginException;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
@@ -63,6 +66,7 @@ public class RobotContainer {
   private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();   
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+  private final funnelSubsystem m_funnelSubsystem = new funnelSubsystem();
   
   //Controller Initialization
   XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
@@ -82,6 +86,8 @@ public class RobotContainer {
   private final JoystickButton resetCoral = new JoystickButton(m_driveController, XboxController.Button.kStart.value);
   private final JoystickButton m_pivotIntake = new JoystickButton(m_driveController, XboxController.Button.kRightBumper.value);
   private final JoystickButton m_algaeScore = new JoystickButton(m_driveController, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton m_moveFunnel = new JoystickButton(m_driveController, XboxController.Button.kX.value);
+  private final JoystickButton m_reverseFunnel = new JoystickButton(m_driveController, XboxController.Button.kY.value);
 
 
  private SendableChooser<Command> autoChooser;
@@ -95,8 +101,8 @@ public class RobotContainer {
 
     // Register Named Commands
     NamedCommands.registerCommand("liftL3", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kLevel3));
-    NamedCommands.registerCommand("intakeCoral", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kFeederStation));
-    NamedCommands.registerCommand("scorecoral", m_coralSubSystem.scoreCoralCommand());
+    NamedCommands.registerCommand("intakecoral", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kFeederStation));
+    NamedCommands.registerCommand("scoreCoral", m_coralSubSystem.scoreCoralCommand());
     NamedCommands.registerCommand("liftl4", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kLevel4));
 
 
@@ -191,6 +197,12 @@ m_pivotOutake.onTrue(m_algaeSubsystem.reverseIntakeCommand());
     m_coralSubSystem.resetCoral();
 
     m_algaeScore.onTrue(m_algaeSubsystem.scoreAlgae());
+
+    m_moveFunnel.whileTrue(new InstantCommand(() -> m_funnelSubsystem.runClimber(Constants.CoralSubsystemConstants.FUNNEL_SPEED_UP)));
+    m_moveFunnel.whileFalse(new InstantCommand(() -> m_funnelSubsystem.runClimber(0)));
+    m_reverseFunnel.whileTrue(new InstantCommand(() -> m_funnelSubsystem.runClimber(Constants.CoralSubsystemConstants.FUNNEL_SPEED_DOWN)));
+    m_reverseFunnel.whileFalse(new InstantCommand(() -> m_funnelSubsystem.runClimber(0)));
+
 
  //Driver trigger controls
  // Right Trigger -> Run ball intake, set to leave out when idle

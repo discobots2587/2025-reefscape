@@ -118,7 +118,7 @@ public final class Configs {
           .p(0.2)
           //.i(0.01)
           .d(0.65)
-          .outputRange(-.25, .5)
+          .outputRange(-.95, .95)
           .maxMotion
           // Set MAXMotion parameters for position control
           .maxVelocity(2000)
