@@ -38,6 +38,7 @@ import frc.robot.Constants.CoralSubsystemConstants;
 import frc.robot.Constants.CoralSubsystemConstants.ArmSetpoints;
 import frc.robot.Constants.CoralSubsystemConstants.ElevatorSetpoints;
 import frc.robot.Constants.CoralSubsystemConstants.IntakeSetpoints;
+import frc.robot.Constants.CoralSubsystemConstants.LEDModes;
 import frc.robot.Constants.SimulationRobotConstants;
 import frc.robot.Constants.ElevatorSubsystemconstant;
 import org.photonvision.PhotonCamera;
@@ -47,6 +48,7 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 import java.util.Set;
 import java.util.stream.Stream;
 import edu.wpi.first.math.geometry.Transform3d;
+import frc.robot.subsystems.LEDSubsystem;
 
 
 public class CoralSubsystem extends SubsystemBase {
@@ -149,6 +151,11 @@ public class CoralSubsystem extends SubsystemBase {
               180 - Units.radiansToDegrees(SimulationRobotConstants.kMinAngleRads) - 90));
   public final  PhotonCamera cameraL = new PhotonCamera("FrontL");
   public final  PhotonCamera cameraR = new PhotonCamera("FrontR");
+    // PWM port 9
+  // Must be a PWM header, not MXP or DIO
+
+  public final LEDSubsystem m_led = new LEDSubsystem(); 
+
 
 
   public CoralSubsystem() {
@@ -408,6 +415,16 @@ public class CoralSubsystem extends SubsystemBase {
     if (cameraRight.getY() < .09 && cameraRight.getY() > .02) {
       scoreL = true;
     }
+    if (scoreR) {
+      m_led.setStatus(LEDModes.kAlignR);
+    } else if (scoreR) {
+      m_led.setStatus(LEDModes.kAlignL);
+    } else if (elevatorEncoder.getPosition()> ArmSetpoints. kFeederStation){
+      m_led.setStatus(LEDModes.kFeeder);
+    } else {
+      m_led.setStatus(LEDModes.kNone);
+    }
+
     SmartDashboard.putBoolean ("Coral/cameraR/scoreR", scoreR);
     SmartDashboard.putBoolean ("Coral/cameraL/scoreL", scoreL);
 

@@ -27,11 +27,6 @@ public final class Constants {
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
-
-
-
-
-
     
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(23.5);
@@ -119,9 +114,11 @@ public final class Constants {
     public static final int kFunnelMotorCanId = 9;
     public static final int FUNNEL_MOTOR_CURRENT_LIMIT = 10;
     public static final double FUNNEL_MOTOR_VOLTAGE_COMP = 12;
+//<<<<<<< HEAD
     public static final double FUNNEL_SPEED_DOWN = -0.05;
     public static final double FUNNEL_SPEED_UP = 0.05;
-   
+//=======
+//>>>>>>> 1211b516d9701d13e2756645fe8730233dfc2863
 
     public static final class ElevatorSetpoints {
       public static final int kIntake = 0;
@@ -144,6 +141,12 @@ public final class Constants {
       public static final double kLevel3 = 0.72; //Was 0.69
       public static final double kLevel4 = 0.72; //Was 0.69
     }
+    public static final class LEDModes {
+      public static final int kNone = 0;
+      public static final int kAlignL = 1;
+      public static final int kAlignR = 2;
+      public static final int kFeeder = 3;
+    } 
 
     public static final class IntakeSetpoints {
       public static final double kForward = 0.5;
