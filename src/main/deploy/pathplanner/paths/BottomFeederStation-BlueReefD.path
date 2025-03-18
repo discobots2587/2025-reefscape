@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7672131147540984,
-        "y": 0.6864241803278684
+        "x": 6.041803278688524,
+        "y": 6.41654713114754
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6086514709184818,
-        "y": 1.2123231529306089
+        "x": 6.883241634852907,
+        "y": 6.942446103750281
       },
       "isLocked": false,
       "linkedName": "BBottomFeederStation"
@@ -48,7 +48,7 @@
   "folder": "CenterLine Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 53.74616226255522
+    "rotation": -125.00000000000001
   },
   "useDefaultConstraints": false
 }
