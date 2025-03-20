@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.041803278688524,
+        "y": 6.41654713114754
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.883241634852907,
+        "y": 6.942446103750281
+      },
+      "isLocked": false,
+      "linkedName": "BBottomFeederStation"
+    },
+    {
+      "anchor": {
+        "x": 3.9667808219178085,
+        "y": 2.8004066780821915
+      },
+      "prevControl": {
+        "x": 2.6595462328767123,
+        "y": 2.124250856164383
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "BReefPosD"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "reversed": false,
+  "folder": "CenterLine Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -125.00000000000001
+  },
+  "useDefaultConstraints": false
+}

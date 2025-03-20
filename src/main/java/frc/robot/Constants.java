@@ -27,11 +27,11 @@ public final class Constants {
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
-
+    
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(20.5);
+    public static final double kTrackWidth = Units.inchesToMeters(23.5);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(20.5);
+    public static final double kWheelBase = Units.inchesToMeters(28.5);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -78,9 +78,11 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int k0pControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
+    public static final double kTriggerButtonThreshold = 0.2;
   }
-
+  
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
@@ -99,6 +101,111 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+  public final class ElevatorSubsystemconstant {
+    public static final double KDefualtMotorspeed = 0.85;
+    public static final double KManualMotorSpeed = 0.5;
+    public static final int ElevatorSubsystemCanId = 48;
+  }
+  public static final class CoralSubsystemConstants {
+    public static final int kElevatorMotorCanId = 51;
+    public static final int kArmMotorCanId = 3;
+    public static final double KDefualtMotorspeed = 0.1;
+    public static final double KManualMotorSpeed = 0.1;
+    public static final int kFunnelMotorCanId = 9;
+    public static final int FUNNEL_MOTOR_CURRENT_LIMIT = 10;
+    public static final double FUNNEL_MOTOR_VOLTAGE_COMP = 12;
+//<<<<<<< HEAD
+    public static final double FUNNEL_SPEED_DOWN = -0.05;
+    public static final double FUNNEL_SPEED_UP = 0.05;
+//=======
+//>>>>>>> 1211b516d9701d13e2756645fe8730233dfc2863
 
+    public static final class ElevatorSetpoints {
+      public static final int kIntake = 0;
+      //we need to change with the funnel
+      public static final int kFeederStation = 55/3; //Was 45
+      public static final int kLevel1 = 30/3;
+      public static final int kLevel2 = 15/3; //Was 30
+      public static final int kLevel2DEAL = 220/3; //TODO: UNTESTED
+      public static final int kLevel3 = 110/3; //Was 150
+      public static final int kLevel3DEAL = 385/3; //TODO: UNTESTED
+      public static final int kLevel4 = 381/3;
+    }
 
+    public static final class ArmSetpoints {
+      public static final double kIntake = 0.24;
+      public static final double kArmDEAL = 0.48; //TODO:UNTESTED 
+      public static final double kFeederStation = 0.24;
+      public static final double kLevel1 = 0.24;
+      public static final double kLevel2 = 0.69; //Was 0.63
+      public static final double kLevel3 = 0.72; //Was 0.69
+      public static final double kLevel4 = 0.72; //Was 0.69
+    }
+    public static final class LEDModes {
+      public static final int kNone = 0;
+      public static final int kAlignL = 1;
+      public static final int kAlignR = 2;
+      public static final int kFeeder = 3;
+    } 
+
+    public static final class IntakeSetpoints {
+      public static final double kForward = 0.5;
+      public static final double kReverse = -0.5;
+    }
+  }
+  public static final class AlgaeSubsystemConstants {
+    public static final int kIntakeMotorCanId = 6;
+    public static final int kPivotMotorCanId = 5;
+
+    public static final class ArmSetpoints {
+      public static final double kStow = -0.1; //STARTING CONFIG
+      public static final double kHold = 5; //Was 5
+      public static final double kDown = 9.75;
+    }
+
+    public static final class IntakeSetpoints {
+      public static final double kForward = 1;
+      public static final double kReverse = -1;
+      public static final double kHold = 0; //Was 0.25
+    }
+  }
+
+  public static final class SimulationRobotConstants {
+    public static final double kPixelsPerMeter = 20;
+
+    public static final double kElevatorGearing = 45; // 45:1
+    public static final double kCarriageMass =
+        4.3 + 3.15 + 0.151; // Kg, arm + elevator stage + chain
+    public static final double kElevatorDrumRadius = 0.035 / 2.0; // m
+    public static final double kMinElevatorHeightMeters = 0.64; // m
+    public static final double kMaxElevatorHeightMeters = 1.65; // m
+
+    public static final double kArmReduction = 50; // 50:1
+    public static final double kArmLength = 0.46; // m
+    public static final double kArmMass = 4.3; // Kg
+    public static final double kMinAngleRads =
+        Units.degreesToRadians(-75 ); // -90 deg from horiz
+    public static final double kMaxAngleRads =
+        Units.degreesToRadians(85 ); // 85 deg from horiz
+
+    public static final double kIntakeReduction = 135; // 135:1
+    public static final double kIntakeLength = 0.4032262; // m
+    public static final double kIntakeMass = 5.8738; // Kg
+    public static final double kIntakeMinAngleRads = Units.degreesToRadians(50); // 80
+    public static final double kIntakeMaxAngleRads = Units.degreesToRadians(150); // 180
+    public static final double kIntakeShortBarLength = 0.3048;  // 0.1524
+    public static final double kIntakeLongBarLength = 0.05;   // 0.3048
+    public static final double kIntakeBarAngleRads = Units.degreesToRadians(-60);
+  }
+  public final class AlgaeSubsystemConstant {
+    public static final int kFunalMotorCanID = 26 ;
+    public static final int kArmMotorCanID = 25;
+  }
+  public static final class ClimberConstants {
+    public static final int CLIMBER_MOTOR_ID = 25;
+    public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 50;
+    public static final double CLIMBER_MOTOR_VOLTAGE_COMP = 12;
+    public static final double CLIMBER_SPEED_DOWN = -0.5;
+    public static final double CLIMBER_SPEED_UP = .5;
+  }
 }

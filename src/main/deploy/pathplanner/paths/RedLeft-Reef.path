@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 9.976667912447557,
+        "y": 0.7963005597792755
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 12.751157823545354,
+        "y": 0.7963005597792755
+      },
+      "isLocked": false,
+      "linkedName": "RLeftStart"
+    },
+    {
+      "anchor": {
+        "x": 13.585697293604415,
+        "y": 2.794824773882847
+      },
+      "prevControl": {
+        "x": 13.432029909386294,
+        "y": 2.5286650569508535
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "RReefPosK"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.5,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Left Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": false
+}

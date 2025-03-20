@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.041803278688524,
+        "y": 6.41654713114754
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.041803278688524,
+        "y": 6.41654713114754
+      },
+      "isLocked": false,
+      "linkedName": "BBottomFeederStation"
+    },
+    {
+      "anchor": {
+        "x": 1.4864754098360657,
+        "y": 7.279661885245901
+      },
+      "prevControl": {
+        "x": 0.48647540983606574,
+        "y": 7.279661885245901
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -45.0
+  },
+  "reversed": false,
+  "folder": "Additional Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -125.00000000000001
+  },
+  "useDefaultConstraints": false
+}

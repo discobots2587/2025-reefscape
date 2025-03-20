@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 12.259892329044623,
+        "y": 2.9538714831397725
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 12.843201092915665,
+        "y": 2.5207452226946434
+      },
+      "isLocked": false,
+      "linkedName": "RreefPosL"
+    },
+    {
+      "anchor": {
+        "x": 15.955635245901638,
+        "y": 1.3817110655737712
+      },
+      "prevControl": {
+        "x": 14.990314252825991,
+        "y": 1.724685636547569
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "RBotttomFeederStation"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Center Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "useDefaultConstraints": false
+}
