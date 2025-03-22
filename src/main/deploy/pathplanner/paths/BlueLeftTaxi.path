@@ -3,6 +3,7 @@
   "waypoints": [
     {
       "anchor": {
+<<<<<<<< HEAD:src/main/deploy/pathplanner/paths/BlueLeftTaxi.path
         "x": 7.5784983422979515,
         "y": 7.265046115866037
       },
@@ -26,6 +27,31 @@
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
+========
+        "x": 7.577909482758622,
+        "y": 4.172467672413793
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.82317213056053,
+        "y": 4.172467672413793
+      },
+      "isLocked": false,
+      "linkedName": "CenterStart"
+    },
+    {
+      "anchor": {
+        "x": 5.790948275862069,
+        "y": 4.172
+      },
+      "prevControl": {
+        "x": 6.2681371529939875,
+        "y": 4.172
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ReefH"
+>>>>>>>> beeaea9ae57b45d92fbbadc2044a01ef417d63aa:src/main/deploy/pathplanner/paths/CenterStart-ReefH.path
     }
   ],
   "rotationTargets": [],
@@ -45,7 +71,11 @@
     "rotation": 0.0
   },
   "reversed": false,
+<<<<<<<< HEAD:src/main/deploy/pathplanner/paths/BlueLeftTaxi.path
   "folder": "Left Paths",
+========
+  "folder": "Center Paths",
+>>>>>>>> beeaea9ae57b45d92fbbadc2044a01ef417d63aa:src/main/deploy/pathplanner/paths/CenterStart-ReefH.path
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
