@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "testauto"
+            "pathName": "Taxi"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "scoreL3"
+            "waitTime": 12.0
           }
         }
       ]

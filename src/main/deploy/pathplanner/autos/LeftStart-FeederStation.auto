@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "move lside"
+            "pathName": "LeftStart-ReefI"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefI-LFeederStation"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Single Score",
   "choreoAuto": false
 }
