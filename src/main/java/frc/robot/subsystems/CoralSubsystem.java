@@ -409,17 +409,17 @@ public class CoralSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Coral/cameraR/getY", cameraRight.getY());
     SmartDashboard.putNumber("Coral/cameraR/getX", cameraRight.getX());
     boolean scoreR = false , scoreL = false;
-    if (cameraLeft.getY() > -.09 && cameraLeft.getY() < -.02) {
+    if (cameraLeft.getY() > -.03 && cameraLeft.getY() < .03) {
       scoreR = true;
     }
-    if (cameraRight.getY() < .09 && cameraRight.getY() > .02) {
+    if (cameraRight.getY() < .03 && cameraRight.getY() > -.03) {
       scoreL = true;
     }
     if (scoreR) {
       m_led.setStatus(LEDModes.kAlignR);
-    } else if (scoreR) {
+    } else if (scoreL) {
       m_led.setStatus(LEDModes.kAlignL);
-    } else if (elevatorEncoder.getPosition()> ArmSetpoints. kFeederStation){
+    } else if (elevatorEncoder.getPosition()< ArmSetpoints. kFeederStation){
       m_led.setStatus(LEDModes.kFeeder);
     } else {
       m_led.setStatus(LEDModes.kNone);

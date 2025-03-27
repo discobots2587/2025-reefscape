@@ -60,7 +60,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Copy of RedRightStart-L4"
+                  "pathName": "TorqueTest Path"
                 }
               },
               {
@@ -70,6 +70,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TorqueTestPath2"
           }
         }
       ]

@@ -19,13 +19,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BlueLeftTaxi"
+            "pathName": null
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Left Autos",
+  "folder": null,
   "choreoAuto": false
 }
