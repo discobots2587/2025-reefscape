@@ -211,9 +211,9 @@ m_pivotOutake.onTrue(m_algaeSubsystem.reverseIntakeCommand());
     m_algaeScore.onTrue(m_algaeSubsystem.scoreAlgae());
 
     m_moveFunnel.whileTrue(new InstantCommand(() -> m_funnelSubsystem.runClimber(Constants.CoralSubsystemConstants.FUNNEL_SPEED_UP)));
-    m_moveFunnel.whileFalse(new InstantCommand(() -> m_funnelSubsystem.runClimber(0)));
+    m_moveFunnel.whileFalse(new InstantCommand(() -> m_funnelSubsystem.runClimber(.015)));
     m_reverseFunnel.whileTrue(new InstantCommand(() -> m_funnelSubsystem.runClimber(Constants.CoralSubsystemConstants.FUNNEL_SPEED_DOWN)));
-    m_reverseFunnel.whileFalse(new InstantCommand(() -> m_funnelSubsystem.runClimber(0)));
+    //m_reverseFunnel.whileFalse(new InstantCommand(() -> m_funnelSubsystem.runClimber(0.1)));
 
 
  //Driver trigger controls

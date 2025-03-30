@@ -1,4 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
+  // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -115,7 +115,7 @@ public final class Constants {
     public static final int FUNNEL_MOTOR_CURRENT_LIMIT = 10;
     public static final double FUNNEL_MOTOR_VOLTAGE_COMP = 12;
 //<<<<<<< HEAD
-    public static final double FUNNEL_SPEED_DOWN = -0.05;
+    public static final double FUNNEL_SPEED_DOWN = -0.025;
     public static final double FUNNEL_SPEED_UP = 0.05;
 //=======
 //>>>>>>> 1211b516d9701d13e2756645fe8730233dfc2863

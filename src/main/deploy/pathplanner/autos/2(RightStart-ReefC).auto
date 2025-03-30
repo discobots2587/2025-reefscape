@@ -29,7 +29,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RedCenter-Reef"
+                  "pathName": "RightStart-ReefF"
                 }
               }
             ]
@@ -66,16 +66,53 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RedReefL-BottomFeeder"
+                  "pathName": "ReefF-RFeederStation"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "liftl4"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RFeederStation-ReefC"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "scoreCoral"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "DoubleBack Autos",
   "choreoAuto": false
 }

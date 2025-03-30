@@ -21,15 +21,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "liftl4"
+                  "pathName": "CenterStart-ReefG"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "RedCenter-Reef"
+                  "name": "liftl4"
                 }
               }
             ]
@@ -66,7 +66,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RedReefL-BottomFeeder"
+                  "pathName": "ReefH-RFeederStation"
                 }
               }
             ]
@@ -76,6 +76,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Single Score",
   "choreoAuto": false
 }

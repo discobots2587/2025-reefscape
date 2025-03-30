@@ -21,15 +21,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "liftl4"
+                  "pathName": "RightStart-ReefF"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "RedCenter-Reef"
+                  "name": "liftl4"
                 }
               }
             ]
@@ -58,15 +58,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "intakecoral"
+                  "pathName": "ReefF-RFeederStation"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "RedReefL-BottomFeeder"
+                  "name": "intakecoral"
                 }
               }
             ]
@@ -76,6 +76,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Single Score",
   "choreoAuto": false
 }

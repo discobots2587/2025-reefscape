@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.191,
-        "y": 4.257898116438356
+        "x": 7.577909482758622,
+        "y": 3.2789870689655167
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.476070205479452,
-        "y": 1.7189178082191776
+        "x": 6.979364224137933,
+        "y": 3.226939655172413
       },
       "isLocked": false,
-      "linkedName": "reef10"
+      "linkedName": "LeftStart"
     },
     {
       "anchor": {
-        "x": 1.2621575342465754,
-        "y": 1.132555650684932
+        "x": 5.279148706896552,
+        "y": 2.984051724137931
       },
       "prevControl": {
-        "x": 5.54447773972603,
-        "y": 1.2677868150684937
+        "x": 5.955765086206898,
+        "y": 2.958028017241379
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "coral12"
+      "linkedName": "ReefF"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 50.0
+    "rotation": 120.50000000000001
   },
   "reversed": false,
-  "folder": "reef-coral",
+  "folder": "RightSide Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

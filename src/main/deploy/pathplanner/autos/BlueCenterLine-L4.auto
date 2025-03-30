@@ -75,6 +75,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "CenterBarge Autos",
+  "folder": null,
   "choreoAuto": false
 }
