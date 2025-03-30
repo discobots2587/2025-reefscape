@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.security.PublicKey;
+
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -7,8 +9,17 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class ClimberSubsystem extends SubsystemBase {
 
@@ -40,6 +51,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+       // SmartDashboard.putNumber("Timer", ClimberSubsystem.time);
     }
 
     /**
@@ -50,5 +62,40 @@ public class ClimberSubsystem extends SubsystemBase {
     public void runClimber(double speed){
         climbMotor.set(speed);
     }
+
+    
+    public Command autoClimberCommand(){
+        return this.runOnce(() -> {
+            final Timer m_time = new Timer();
+            m_time.restart();
+            //new SequentialCommandGroup(
+            //new InstantCommand(()-> runClimber(Constants.ClimberConstants.CLIMBER_SPEED_DOWN))   );
+            
+            //new WaitCommand(2),
+            //new InstantCommand(()-> runClimber(0)));
+            while (!m_time.hasElapsed(2.0)){
+                runClimber(Constants.ClimberConstants.CLIMBER_SPEED_DOWN);
+                /**
+                if (Timer.getMatchTime() > 3){
+                    autoStopClimber();
+                }
+                    */
+            }; 
+            runClimber(0);
+        
+        });
+    }
+
+    
+    public Command autoStopClimber(){
+        return this.run(() -> {
+            runClimber(0);
+        }
+         );
+    }
+        
+
+
+
 
 }

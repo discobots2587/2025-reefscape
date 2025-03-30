@@ -29,7 +29,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": null
+                  "pathName": "CenterStart-ReefG"
                 }
               }
             ]
@@ -79,6 +79,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "feedcoral"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -107,6 +113,12 @@
           "type": "named",
           "data": {
             "name": "scoreCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakecoral"
           }
         }
       ]

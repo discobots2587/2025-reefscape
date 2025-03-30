@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "intakecoral"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakecoral"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ClimberOut"
+                }
+              }
+            ]
           }
         },
         {
@@ -50,7 +63,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.0
           }
         },
         {
@@ -66,7 +79,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ReefH-RFeederStation"
+                  "pathName": "ReefG-RFeederStation"
                 }
               }
             ]

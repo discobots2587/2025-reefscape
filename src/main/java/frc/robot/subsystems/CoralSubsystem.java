@@ -48,6 +48,7 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 import java.util.Set;
 import java.util.stream.Stream;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import frc.robot.subsystems.LEDSubsystem;
 
 
@@ -404,16 +405,20 @@ public class CoralSubsystem extends SubsystemBase {
   
     
     Transform3d cameraRight = updateCameraPositions(cameraR);
-
-    
     SmartDashboard.putNumber("Coral/cameraR/getY", cameraRight.getY());
     SmartDashboard.putNumber("Coral/cameraR/getX", cameraRight.getX());
+    
+    
     boolean scoreR = false , scoreL = false;
     if (cameraLeft.getY() > -.03 && cameraLeft.getY() < .03) {
       scoreR = true;
-    }
-    if (cameraRight.getY() < .03 && cameraRight.getY() > -.03) {
+      scoreL = false;
+    } else if (cameraRight.getY() < .03 && cameraRight.getY() > -.03) {
       scoreL = true;
+      scoreR = false;
+    } else {
+      scoreL = false;
+      scoreR = false;
     }
     if (scoreR) {
       m_led.setStatus(LEDModes.kAlignR);
@@ -484,7 +489,8 @@ public class CoralSubsystem extends SubsystemBase {
     // SimBattery is updated in Robot.java
   }
   public Transform3d updateCameraPositions(PhotonCamera photonCamera) {
-    Transform3d  cameraToTarget = new Transform3d();
+    double devault = 100.0;
+    Transform3d  cameraToTarget = new Transform3d(100.,100.,100., new Rotation3d());
     var photoResults = photonCamera.getAllUnreadResults();
     var lastTagResult = photoResults.stream()
         .filter(result -> result.hasTargets())

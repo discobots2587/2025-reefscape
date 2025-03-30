@@ -5,15 +5,71 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "LeftStart-ReefI"
+            "name": "intakecoral"
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "ReefI-LFeederStation"
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LeftStart-ReefI"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "liftl4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "scoreCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ReefI-LFeederStation"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakecoral"
+                }
+              }
+            ]
           }
         }
       ]

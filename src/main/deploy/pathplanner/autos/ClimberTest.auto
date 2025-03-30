@@ -7,19 +7,13 @@
         {
           "type": "named",
           "data": {
-            "name": "intakecoral"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 10.0
+            "name": "ClimberOut"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RedRightTaxi"
+            "pathName": "Blue EMERGENCY"
           }
         }
       ]
