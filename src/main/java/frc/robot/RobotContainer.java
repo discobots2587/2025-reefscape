@@ -35,6 +35,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.funnelSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.commands.AlignToBranch;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -73,6 +74,9 @@ public class RobotContainer {
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private final funnelSubsystem m_funnelSubsystem = new funnelSubsystem();
+  private final AlignToBranch m_AlignToRBranch = new AlignToBranch(m_robotDrive, m_coralSubSystem, false, 0);
+  private final AlignToBranch m_AlignToLBranch = new AlignToBranch(m_robotDrive, m_coralSubSystem, true, 0);
+
   
   //Controller Initialization
   XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
@@ -109,6 +113,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakecoral", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kFeederStation));
     NamedCommands.registerCommand("scoreCoral", m_coralSubSystem.scoreCoralCommand());
     NamedCommands.registerCommand("liftl4", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kLevel4));
+    NamedCommands.registerCommand("AlignLeft", m_AlignToLBranch);
+    NamedCommands.registerCommand("AlignRight", m_AlignToRBranch);
+
 
 
     NamedCommands.registerCommand("liftl0", new InstantCommand(() -> System.out.println("lift level 0")));
@@ -253,7 +260,7 @@ CommandXboxController m_operatorController = new CommandXboxController(OIConstan
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    /*   REMOVE  THIS COMMENT TO ENABLE TRAJECTORY AUTO (also remove lots of unused import statements)
+    /*    REMOVE  THIS COMMENT TO ENABLE TRAJECTORY AUTO (also remove lots of unused import statements)
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
@@ -291,7 +298,7 @@ CommandXboxController m_operatorController = new CommandXboxController(OIConstan
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+    //return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
     */
     return autoChooser.getSelected();  // use this line for Path Planner Selector
   }

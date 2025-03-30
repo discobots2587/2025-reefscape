@@ -152,6 +152,13 @@ public final class Constants {
       public static final double kForward = 0.5;
       public static final double kReverse = -0.5;
     }
+    public static final class CoralTarget {
+      public static final double kTargetX = 0.024;
+      public static final double kTargetY = 0.0;
+      public static final double kTargetYTol = 0.005;
+      public static final double kTargetXTol = 0.01;
+
+    }
   }
   public static final class AlgaeSubsystemConstants {
     public static final int kIntakeMotorCanId = 6;
