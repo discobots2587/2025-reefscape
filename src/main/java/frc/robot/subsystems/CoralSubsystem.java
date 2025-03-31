@@ -289,6 +289,22 @@ public class CoralSubsystem extends SubsystemBase {
    * This is a separate command because the arm needs to move down after the elevator has reached
    */
   public Command scoreCoralCommand(){
+    // echo camera values
+    Transform3d rpos = updateCameraPositions(cameraL);
+    if (rpos.getX() < 10){
+    System.out.println(" Right Target");
+    System.out.println(rpos.getX()*100.);
+    System.out.println(rpos.getY()*100.);
+
+    }
+    Transform3d lpos = updateCameraPositions(cameraR);
+    if (lpos.getX() < 10){
+    System.out.println(" Left Target");
+    System.out.println(lpos.getX()*100);
+    System.out.println(lpos.getY()*100);
+
+    }
+      
     return this.runOnce(
       () -> {
         double arm_delta = .22;
@@ -316,6 +332,7 @@ public class CoralSubsystem extends SubsystemBase {
             break;
         }
       });
+
   }
 
   //This Command will allow the operator to pickup coral with one button
@@ -487,6 +504,14 @@ public class CoralSubsystem extends SubsystemBase {
         RobotController.getBatteryVoltage(),
         0.02);
     // SimBattery is updated in Robot.java
+  }
+  public Transform3d getTargetPos (boolean is_right) {
+    if (is_right){
+      return updateCameraPositions(cameraL);
+    }
+    else {
+      return updateCameraPositions(cameraR);
+    }
   }
   public Transform3d updateCameraPositions(PhotonCamera photonCamera) {
     double devault = 100.0;

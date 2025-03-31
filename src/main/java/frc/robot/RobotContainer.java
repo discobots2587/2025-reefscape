@@ -37,6 +37,9 @@ public class RobotContainer {
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private final funnelSubsystem m_funnelSubsystem = new funnelSubsystem();
+  private final AlignToBranch m_AlignToRBranch = new AlignToBranch(m_robotDrive, m_coralSubSystem, false, 0);
+  private final AlignToBranch m_AlignToLBranch = new AlignToBranch(m_robotDrive, m_coralSubSystem, true, 0);
+
   
   //Controller Initialization
   XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
@@ -217,7 +220,7 @@ CommandXboxController m_operatorController = new CommandXboxController(OIConstan
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    /*   REMOVE  THIS COMMENT TO ENABLE TRAJECTORY AUTO (also remove lots of unused import statements)
+    /*    REMOVE  THIS COMMENT TO ENABLE TRAJECTORY AUTO (also remove lots of unused import statements)
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
@@ -255,7 +258,7 @@ CommandXboxController m_operatorController = new CommandXboxController(OIConstan
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+    //return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
     */
     return autoChooser.getSelected();  // use this line for Path Planner Selector
   }
