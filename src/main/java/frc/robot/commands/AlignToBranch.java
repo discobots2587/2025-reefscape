@@ -83,11 +83,16 @@ public class AlignToBranch extends Command {
 
   @Override
   public void execute() { 
-    Transform3d target_pos = m_coral.getTargetPos(isRightScore);
-    SmartDashboard.putNumber("x", target_pos.getX());
-    SmartDashboard.putNumber("y", target_pos.getY());
+    Transform3d target_pos = m_coral.getTargetPos(isRightScore); 
+    double tX = target_pos.getX();
+    double tY = target_pos.getY();
     double path_x = target_pos.getX() - Constants.CoralSubsystemConstants.CoralTarget.kTargetX;
     double path_y = target_pos.getY() - Constants.CoralSubsystemConstants.CoralTarget.kTargetY;
+
+    //Multiply negative 1
+    path_x *= 0;
+    path_y *= 1;
+    
      // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
@@ -97,25 +102,35 @@ public class AlignToBranch extends Command {
 
      Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction
-        List.of(new Pose2d(0, 0, new Rotation2d(0)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(path_x, path_y, new Rotation2d(0))),
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(path_x/2,path_y/2)), new Pose2d(path_x, path_y, new Rotation2d(0)),
         config);
-
+/** 
+        // Start at the origin facing the +X direction
+        new Pose2d(0, 0, new Rotation2d(0)),
+        // Pass through these two interior waypoints, making an 's' curve path
+        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(3, 0, new Rotation2d(0)),
+        config);
+*/
 
    /*  if (LimelightHelpers.getTV("") && LimelightHelpers.getFiducialID("") == tagID) {
         this.dontSeeTagTimer.reset();
 
         double[] postions = LimelightHelpers.getBotPose_TargetSpace("");
       */
-      if(path_x < 10){
+      if(path_x < 2){ //was 10
 
-        SmartDashboard.putNumber("x", path_x);
-        SmartDashboard.putNumber("y", path_y);
-        SmartDashboard.putNumber("rot", 0.0);
+        SmartDashboard.putNumber("Align/Camera/MoveX", path_x*100);
+        SmartDashboard.putNumber("Align/Camera/MoveY", path_y*100);
+        SmartDashboard.putNumber("Align/Camera/Rotrot", 0.0);
+
+        SmartDashboard.putNumber("Align/Camera/getX", tX*100);
+        SmartDashboard.putNumber("Align/Camera/getY", tY*100);
 
         double xSpeed = xController.calculate(path_x);
-        double ySpeed = -yController.calculate(path_y);
+        double ySpeed = yController.calculate(path_y);
         double rotValue = rotController.calculate(0.0);
         ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
         //drivebase.drive(new Translation2d(xSpeed, ySpeed), rotValue, false);
@@ -131,7 +146,7 @@ public class AlignToBranch extends Command {
         m_drivetrain::setModuleStates,
         m_drivetrain);
         //DriveSubsystem.ChassisSpeeds(xSpeed , ySpeed , rotValue);
-        m_drivetrain.driveRobotRelative(new ChassisSpeeds(0 , 0 , 0));
+        m_drivetrain.driveRobotRelative(new ChassisSpeeds(xSpeed , ySpeed , rotValue));
 
         if (!rotController.atSetpoint() ||
             !yController.atSetpoint() || !xController.atSetpoint()) {
@@ -139,8 +154,8 @@ public class AlignToBranch extends Command {
         }
     }      
     else {
-       // ChassisSpeeds stopspeeds( 0.0 , 0.0 , 0.0);
-        //m_drivetrain.driveRobotRelative(stopspeeds);
+      m_drivetrain.driveRobotRelative(new ChassisSpeeds(0 , 0 , 0));
+      //m_drivetrain.driveRobotRelative(stopspeeds);
     }
 
     SmartDashboard.putNumber("poseValidTimer", stopTimer.get());

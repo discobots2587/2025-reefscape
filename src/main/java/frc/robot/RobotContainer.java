@@ -39,6 +39,8 @@ public class RobotContainer {
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private final funnelSubsystem m_funnelSubsystem = new funnelSubsystem();
+
+  //Auto Align Command
   private final AlignToBranch m_AlignToRBranch = new AlignToBranch(m_robotDrive, m_coralSubSystem, false, 0);
   private final AlignToBranch m_AlignToLBranch = new AlignToBranch(m_robotDrive, m_coralSubSystem, true, 0);
 
@@ -209,6 +211,10 @@ CommandXboxController m_operatorController = new CommandXboxController(OIConstan
     m_driverController.pov(0).onFalse(new InstantCommand(() ->m_climberSubsystem.runClimber(0.0)));
     m_driverController.pov(180).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(Constants.ClimberConstants.CLIMBER_SPEED_DOWN)));
     m_driverController.pov(180).onFalse(new InstantCommand(() ->m_climberSubsystem.runClimber(0.0)));
+    
+    //Auto align testing
+    m_driverController.pov(90).onTrue(m_AlignToRBranch);
+    m_driverController.pov(270).onTrue(m_AlignToLBranch);
 
     //Operator Controller DPAD
      m_operatorController.pov(90).onTrue(m_coralSubSystem.scoreCoralCommand());

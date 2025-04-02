@@ -73,7 +73,7 @@ public class ClimberSubsystem extends SubsystemBase {
             
             //new WaitCommand(2),
             //new InstantCommand(()-> runClimber(0)));
-            while (!m_time.hasElapsed(2.0)){
+            while (!m_time.hasElapsed(1.0)){ //Was 2.0 in Space City
                 runClimber(Constants.ClimberConstants.CLIMBER_SPEED_DOWN);
                 /**
                 if (Timer.getMatchTime() > 3){
