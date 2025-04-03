@@ -50,6 +50,7 @@ import java.util.stream.Stream;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import frc.robot.subsystems.LEDSubsystem;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 
 public class CoralSubsystem extends SubsystemBase {
@@ -156,6 +157,7 @@ public class CoralSubsystem extends SubsystemBase {
   // Must be a PWM header, not MXP or DIO
 
   public final LEDSubsystem m_led = new LEDSubsystem(); 
+  private DigitalInput m_CoralSensor = new DigitalInput(7);
 
 
 
@@ -415,6 +417,8 @@ public class CoralSubsystem extends SubsystemBase {
     } else {
       SmartDashboard.putNumber("Coral/Elevator/Down", 0);
     }
+    boolean have_coral = m_CoralSensor.get();
+    SmartDashboard.putBoolean ("Coral/Intake/HaveCoral", have_coral);
     // return camera positions
     Transform3d cameraLeft = updateCameraPositions(cameraL);
     SmartDashboard.putNumber("Coral/cameraL/getY", cameraLeft.getY());
@@ -534,5 +538,8 @@ public class CoralSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Coral/camera/tag", tag.getFiducialId());
     }
     return cameraToTarget;
+  }
+  public boolean haveCoral(){
+    return m_CoralSensor.get();
   }
 }
