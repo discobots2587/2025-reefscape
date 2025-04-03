@@ -214,7 +214,7 @@ CommandXboxController m_operatorController = new CommandXboxController(OIConstan
     
     //Auto align testing
     m_driverController.pov(90).whileTrue(m_AlignToRBranch);
-    m_driverController.pov(270).onTrue(m_AlignToLBranch);
+    m_driverController.pov(270).whileTrue(m_AlignToLBranch);
 
     //Operator Controller DPAD
      m_operatorController.pov(90).onTrue(m_coralSubSystem.scoreCoralCommand());

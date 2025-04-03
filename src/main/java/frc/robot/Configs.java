@@ -78,7 +78,7 @@ public final class Configs {
           // Set PID values for position control
           .p(0.1)
           .d(0.1)
-          .outputRange(-.15, +.2)
+          .outputRange(-.2, +.3)
           .positionWrappingEnabled(true)
           .maxMotion
           // Set MAXMotion parameters for position control
@@ -118,11 +118,11 @@ public final class Configs {
           .p(0.2)
           //.i(0.01)
           .d(0.65)
-          .outputRange(-.97, .97)
+          .outputRange(-.99, .99)
           .maxMotion
           // Set MAXMotion parameters for position control
-          .maxVelocity(3000)
-          .maxAcceleration(2250)
+          .maxVelocity(4000) //was 3000
+          .maxAcceleration(3000) //was 2250
           .allowedClosedLoopError(0.05);
       } else {
         elevatorConfig

@@ -50,7 +50,7 @@ public class AlignToBranch extends Command {
     
 
   public AlignToBranch(DriveSubsystem m_drivetrain, CoralSubsystem coral, boolean is_right, int tag) {
-    double p_x = 1,p_y = 2.0, p_r = 0.1625;
+    double p_x = 4.0,p_y = 4.0, p_r = 0.1625;
     xController = new PIDController(p_x, 0.0, 0);  // Vertical movement
     yController = new PIDController(p_y, 0.0, 0);  // Horitontal movement
     rotController = new PIDController(p_r, 0, 0);  // Rotation
@@ -88,10 +88,6 @@ public class AlignToBranch extends Command {
     double tY = target_pos.getY();
     double path_x = target_pos.getX() - Constants.CoralSubsystemConstants.CoralTarget.kTargetX;
     double path_y = target_pos.getY() - Constants.CoralSubsystemConstants.CoralTarget.kTargetY;
-
-    //Multiply negative 1
-    path_x *= 1;
-    path_y *= 1;
     
      // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
@@ -105,15 +101,6 @@ public class AlignToBranch extends Command {
         new Pose2d(0, 0, new Rotation2d(0)),
         List.of(new Translation2d(path_x/2,path_y/2)), new Pose2d(path_x, path_y, new Rotation2d(0)),
         config);
-/** 
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        config);
-*/
 
    /*  if (LimelightHelpers.getTV("") && LimelightHelpers.getFiducialID("") == tagID) {
         this.dontSeeTagTimer.reset();
@@ -131,9 +118,15 @@ public class AlignToBranch extends Command {
 
         double xSpeed = xController.calculate(path_x);
         double ySpeed = -yController.calculate(path_y);
+
+        
+        SmartDashboard.putNumber("Align/Camera/xSpeed",xSpeed);
+        SmartDashboard.putNumber("Align/Camera/ySpeed", ySpeed);
+
         double rotValue = rotController.calculate(0.0);
         ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
         //drivebase.drive(new Translation2d(xSpeed, ySpeed), rotValue, false);
+        //m_drivetrain.drive(xSpeed, ySpeed, rotValue, true);
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
         exampleTrajectory,
         m_drivetrain::getPose, // Functional interface to feed supplier
@@ -168,7 +161,9 @@ public class AlignToBranch extends Command {
   @Override
   public boolean isFinished() {
     // Requires the robot to stay in the correct position for 0.3 seconds, as long as it gets a tag in the camera
-    return (this.dontSeeTagTimer.hasElapsed(3.0) ||
+    boolean done = (this.dontSeeTagTimer.hasElapsed(3.0) ||
         this.stopTimer.hasElapsed(2.0)) || this.idleTimer.hasElapsed(1.5);
+        System.out.println("Align Command Done" + done);
+        return done;
   }
 }
