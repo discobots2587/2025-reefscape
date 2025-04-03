@@ -213,7 +213,7 @@ CommandXboxController m_operatorController = new CommandXboxController(OIConstan
     m_driverController.pov(180).onFalse(new InstantCommand(() ->m_climberSubsystem.runClimber(0.0)));
     
     //Auto align testing
-    m_driverController.pov(90).onTrue(m_AlignToRBranch);
+    m_driverController.pov(90).whileTrue(m_AlignToRBranch);
     m_driverController.pov(270).onTrue(m_AlignToLBranch);
 
     //Operator Controller DPAD

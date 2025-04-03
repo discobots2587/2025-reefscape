@@ -50,7 +50,7 @@ public class AlignToBranch extends Command {
     
 
   public AlignToBranch(DriveSubsystem m_drivetrain, CoralSubsystem coral, boolean is_right, int tag) {
-    double p_x = 1.5, p_y = 3.0, p_r = .125;
+    double p_x = 1,p_y = 2.0, p_r = 0.1625;
     xController = new PIDController(p_x, 0.0, 0);  // Vertical movement
     yController = new PIDController(p_y, 0.0, 0);  // Horitontal movement
     rotController = new PIDController(p_r, 0, 0);  // Rotation
@@ -90,7 +90,7 @@ public class AlignToBranch extends Command {
     double path_y = target_pos.getY() - Constants.CoralSubsystemConstants.CoralTarget.kTargetY;
 
     //Multiply negative 1
-    path_x *= 0;
+    path_x *= 1;
     path_y *= 1;
     
      // Create config for trajectory
@@ -120,7 +120,7 @@ public class AlignToBranch extends Command {
 
         double[] postions = LimelightHelpers.getBotPose_TargetSpace("");
       */
-      if(path_x < 2){ //was 10
+      if(path_x < 2 && path_y < 2){ //was 10
 
         SmartDashboard.putNumber("Align/Camera/MoveX", path_x*100);
         SmartDashboard.putNumber("Align/Camera/MoveY", path_y*100);
@@ -130,7 +130,7 @@ public class AlignToBranch extends Command {
         SmartDashboard.putNumber("Align/Camera/getY", tY*100);
 
         double xSpeed = xController.calculate(path_x);
-        double ySpeed = yController.calculate(path_y);
+        double ySpeed = -yController.calculate(path_y);
         double rotValue = rotController.calculate(0.0);
         ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
         //drivebase.drive(new Translation2d(xSpeed, ySpeed), rotValue, false);
