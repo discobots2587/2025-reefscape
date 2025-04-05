@@ -157,7 +157,7 @@ public class CoralSubsystem extends SubsystemBase {
   // Must be a PWM header, not MXP or DIO
 
   public final LEDSubsystem m_led = new LEDSubsystem(); 
-  private DigitalInput m_CoralSensor = new DigitalInput(7);
+  private DigitalInput m_CoralSensor = new DigitalInput(9);
 
 
 

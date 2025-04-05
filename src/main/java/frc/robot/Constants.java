@@ -115,7 +115,7 @@ public final class Constants {
     public static final int FUNNEL_MOTOR_CURRENT_LIMIT = 10;
     public static final double FUNNEL_MOTOR_VOLTAGE_COMP = 12;
 //<<<<<<< HEAD
-    public static final double FUNNEL_SPEED_DOWN = -0.2;
+    public static final double FUNNEL_SPEED_DOWN = -0.5;
     public static final double FUNNEL_SPEED_UP = 0.05;
 //=======
 //>>>>>>> 1211b516d9701d13e2756645fe8730233dfc2863
@@ -153,7 +153,7 @@ public final class Constants {
       public static final double kReverse = -0.5;
     }
     public static final class CoralTarget {
-      public static final double kTargetX = 0.267; //was 0.024
+      public static final double kTargetX = 0.275; //was 0.024
       public static final double kTargetY = 0.0;
       public static final double kTargetYTol = 0.005;
       public static final double kTargetXTol = 0.01;
@@ -213,6 +213,6 @@ public final class Constants {
     public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 50;
     public static final double CLIMBER_MOTOR_VOLTAGE_COMP = 12;
     public static final double CLIMBER_SPEED_DOWN = -0.5;
-    public static final double CLIMBER_SPEED_UP = .5;
+    public static final double CLIMBER_SPEED_UP = 1;
   }
 }

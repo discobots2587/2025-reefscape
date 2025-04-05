@@ -50,7 +50,7 @@ public class AlignToBranch extends Command {
     
 
   public AlignToBranch(DriveSubsystem m_drivetrain, CoralSubsystem coral, boolean is_right, int tag) {
-    double p_x = 4.0,p_y = 4.0, p_r = 0.1625;
+    double p_x = 3,p_y = 2, p_r = 2;
     xController = new PIDController(p_x, 0.0, 0);  // Vertical movement
     yController = new PIDController(p_y, 0.0, 0);  // Horitontal movement
     rotController = new PIDController(p_r, 0, 0);  // Rotation
@@ -61,6 +61,7 @@ public class AlignToBranch extends Command {
     addRequirements(m_drivetrain);
   }
 
+  public int count = 0;
   @Override
   public void initialize() {
     this.stopTimer = new Timer();
@@ -69,6 +70,7 @@ public class AlignToBranch extends Command {
     this.dontSeeTagTimer.start();
     this.idleTimer = new Timer();
     this.idleTimer.start();
+    count = 0;
 
 
     
@@ -86,8 +88,8 @@ public class AlignToBranch extends Command {
     Transform3d target_pos = m_coral.getTargetPos(isRightScore); 
     double tX = target_pos.getX();
     double tY = target_pos.getY();
-    double path_x = target_pos.getX() - Constants.CoralSubsystemConstants.CoralTarget.kTargetX;
-    double path_y = target_pos.getY() - Constants.CoralSubsystemConstants.CoralTarget.kTargetY;
+    double path_x = target_pos.getX(); 
+    double path_y = target_pos.getY();
     
      // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
@@ -108,10 +110,11 @@ public class AlignToBranch extends Command {
         double[] postions = LimelightHelpers.getBotPose_TargetSpace("");
       */
       if(path_x < 2 && path_y < 2){ //was 10
-
+        count ++;
         SmartDashboard.putNumber("Align/Camera/MoveX", path_x*100);
         SmartDashboard.putNumber("Align/Camera/MoveY", path_y*100);
         SmartDashboard.putNumber("Align/Camera/Rotrot", 0.0);
+        SmartDashboard.putNumber("Align/COUNT", count);
 
         SmartDashboard.putNumber("Align/Camera/getX", tX*100);
         SmartDashboard.putNumber("Align/Camera/getY", tY*100);
@@ -126,7 +129,7 @@ public class AlignToBranch extends Command {
         double rotValue = rotController.calculate(0.0);
         ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
         //drivebase.drive(new Translation2d(xSpeed, ySpeed), rotValue, false);
-        //m_drivetrain.drive(xSpeed, ySpeed, rotValue, true);
+        m_drivetrain.drive(-xSpeed, ySpeed, rotValue, true);
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
         exampleTrajectory,
         m_drivetrain::getPose, // Functional interface to feed supplier
@@ -139,10 +142,9 @@ public class AlignToBranch extends Command {
         m_drivetrain::setModuleStates,
         m_drivetrain);
         //DriveSubsystem.ChassisSpeeds(xSpeed , ySpeed , rotValue);
-        m_drivetrain.driveRobotRelative(new ChassisSpeeds(xSpeed , ySpeed , rotValue));
+        //m_drivetrain.driveRobotRelative(new ChassisSpeeds(xSpeed , ySpeed , rotValue));
 
-        if (!rotController.atSetpoint() ||
-            !yController.atSetpoint() || !xController.atSetpoint()) {
+        if (!yController.atSetpoint()||!xController.atSetpoint()) {
             stopTimer.reset();
         }
     }      
@@ -161,8 +163,8 @@ public class AlignToBranch extends Command {
   @Override
   public boolean isFinished() {
     // Requires the robot to stay in the correct position for 0.3 seconds, as long as it gets a tag in the camera
-    boolean done = (this.dontSeeTagTimer.hasElapsed(3.0) ||
-        this.stopTimer.hasElapsed(2.0)) || this.idleTimer.hasElapsed(1.5);
+    boolean done = (this.dontSeeTagTimer.hasElapsed(0.5) ||
+        this.stopTimer.hasElapsed(2.0)) || this.idleTimer.hasElapsed(2.5);
         System.out.println("Align Command Done" + done);
         return done;
   }

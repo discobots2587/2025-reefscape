@@ -174,10 +174,14 @@ m_pivotOutake.onTrue(m_algaeSubsystem.reverseIntakeCommand());
 
     m_algaeScore.onTrue(m_algaeSubsystem.scoreAlgae());
 
+
+
     m_moveFunnel.whileTrue(new InstantCommand(() -> m_funnelSubsystem.runClimber(Constants.CoralSubsystemConstants.FUNNEL_SPEED_UP)));
     m_moveFunnel.whileFalse(new InstantCommand(() -> m_funnelSubsystem.runClimber(.02))); //was .015
+
+
     m_reverseFunnel.whileTrue(new InstantCommand(() -> m_funnelSubsystem.runClimber(Constants.CoralSubsystemConstants.FUNNEL_SPEED_DOWN)));
-    //m_reverseFunnel.whileFalse(new InstantCommand(() -> m_funnelSubsystem.runClimber(0.1)));
+    m_reverseFunnel.whileFalse(new InstantCommand(() -> m_funnelSubsystem.runClimber(0.1)));
 
 
  //Driver trigger controls
@@ -213,8 +217,8 @@ CommandXboxController m_operatorController = new CommandXboxController(OIConstan
     m_driverController.pov(180).onFalse(new InstantCommand(() ->m_climberSubsystem.runClimber(0.0)));
     
     //Auto align testing
-    m_driverController.pov(90).whileTrue(m_AlignToRBranch);
-    m_driverController.pov(270).whileTrue(m_AlignToLBranch);
+    m_driverController.pov(90).onTrue(m_AlignToRBranch);
+    m_driverController.pov(270).onTrue(m_AlignToLBranch);
 
     //Operator Controller DPAD
      m_operatorController.pov(90).onTrue(m_coralSubSystem.scoreCoralCommand());
