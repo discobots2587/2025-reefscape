@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.CoralSubsystemConstants.CoralTarget;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -50,7 +51,7 @@ public class AlignToBranch extends Command {
     
 
   public AlignToBranch(DriveSubsystem m_drivetrain, CoralSubsystem coral, boolean is_right, int tag) {
-    double p_x = 3,p_y = 2, p_r = 2;
+    double p_x = 10,p_y = 8, p_r = 2;
     xController = new PIDController(p_x, 0.0, 0);  // Vertical movement
     yController = new PIDController(p_y, 0.0, 0);  // Horitontal movement
     rotController = new PIDController(p_r, 0, 0);  // Rotation
@@ -91,6 +92,16 @@ public class AlignToBranch extends Command {
     double path_x = target_pos.getX(); 
     double path_y = target_pos.getY();
     
+    boolean close = false;
+    if 
+    (
+    (Math.abs(tX - CoralTarget.kTargetX) < CoralTarget.kTargetXTol) || 
+    (Math.abs(tY - CoralTarget.kTargetY) < CoralTarget.kTargetYTol)
+    )
+    {
+      close = true;
+    }
+
      // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
@@ -119,7 +130,7 @@ public class AlignToBranch extends Command {
         SmartDashboard.putNumber("Align/Camera/getX", tX*100);
         SmartDashboard.putNumber("Align/Camera/getY", tY*100);
 
-        double xSpeed = xController.calculate(path_x);
+        double xSpeed = -xController.calculate(path_x);
         double ySpeed = -yController.calculate(path_y);
 
         
@@ -141,8 +152,9 @@ public class AlignToBranch extends Command {
         thetaController,       
         m_drivetrain::setModuleStates,
         m_drivetrain);
+
         //DriveSubsystem.ChassisSpeeds(xSpeed , ySpeed , rotValue);
-        //m_drivetrain.driveRobotRelative(new ChassisSpeeds(xSpeed , ySpeed , rotValue));
+        m_drivetrain.driveRobotRelative(new ChassisSpeeds(xSpeed , ySpeed , rotValue));
 
         if (!yController.atSetpoint()||!xController.atSetpoint()) {
             stopTimer.reset();
@@ -162,10 +174,25 @@ public class AlignToBranch extends Command {
 
   @Override
   public boolean isFinished() {
+    Transform3d target_pos = m_coral.getTargetPos(isRightScore); 
+    double tX = target_pos.getX();
+    double tY = target_pos.getY();
+
+    boolean close = false;
+    if 
+    (
+    (Math.abs(tX - CoralTarget.kTargetX) < CoralTarget.kTargetXTol) || 
+    (Math.abs(tY - CoralTarget.kTargetY) < CoralTarget.kTargetYTol)
+    )
+    {
+      close = true;
+    }
+    SmartDashboard.putBoolean("AlignToBranch/Close", close);
     // Requires the robot to stay in the correct position for 0.3 seconds, as long as it gets a tag in the camera
-    boolean done = (this.dontSeeTagTimer.hasElapsed(0.5) ||
+    boolean done = (this.dontSeeTagTimer.hasElapsed(0.5) || close ||        
         this.stopTimer.hasElapsed(2.0)) || this.idleTimer.hasElapsed(2.5);
-        System.out.println("Align Command Done" + done);
+
+        System.out.println("Align Command Done" + close);
         return done;
   }
 }
