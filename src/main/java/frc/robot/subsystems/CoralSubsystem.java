@@ -151,6 +151,7 @@ public class CoralSubsystem extends SubsystemBase {
               "Arm",
               SimulationRobotConstants.kArmLength * SimulationRobotConstants.kPixelsPerMeter,
               180 - Units.radiansToDegrees(SimulationRobotConstants.kMinAngleRads) - 90));
+              
   public final  PhotonCamera cameraL = new PhotonCamera("FrontL");
   public final  PhotonCamera cameraR = new PhotonCamera("FrontR");
     // PWM port 9
@@ -518,8 +519,7 @@ public class CoralSubsystem extends SubsystemBase {
     }
   }
   public Transform3d updateCameraPositions(PhotonCamera photonCamera) {
-    double devault = 100.0;
-    Transform3d  cameraToTarget = new Transform3d(100.,100.,100., new Rotation3d());
+    Transform3d  cameraToTarget = new Transform3d(0.,0.,0., new Rotation3d());
     var photoResults = photonCamera.getAllUnreadResults();
     var lastTagResult = photoResults.stream()
         .filter(result -> result.hasTargets())

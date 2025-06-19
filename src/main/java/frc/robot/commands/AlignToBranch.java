@@ -47,17 +47,17 @@ public class AlignToBranch extends Command {
     private Timer dontSeeTagTimer, stopTimer, idleTimer;
     private DriveSubsystem m_drivetrain;
     private CoralSubsystem m_coral;
-    private double tagID = -1;
+    //private double tagID;
     
 
-  public AlignToBranch(DriveSubsystem m_drivetrain, CoralSubsystem coral, boolean is_right, int tag) {
-    double p_x = 10,p_y = 8, p_r = 2;
+  public AlignToBranch(DriveSubsystem m_drivetrain, CoralSubsystem coral, boolean is_right) {
+    double p_x = 5,p_y = 5, p_r = 2;
     xController = new PIDController(p_x, 0.0, 0);  // Vertical movement
     yController = new PIDController(p_y, 0.0, 0);  // Horitontal movement
     rotController = new PIDController(p_r, 0, 0);  // Rotation
     this.m_drivetrain = m_drivetrain;
     this.m_coral = coral;
-    this.tagID = tag;
+    //this.tagID = tag;
     this.isRightScore = is_right;
     addRequirements(m_drivetrain);
   }
@@ -69,10 +69,11 @@ public class AlignToBranch extends Command {
     this.stopTimer.start();
     this.dontSeeTagTimer = new Timer();
     this.dontSeeTagTimer.start();
+    /* 
     this.idleTimer = new Timer();
     this.idleTimer.start();
     count = 0;
-
+*/
 
     
     xController.setSetpoint(Constants.CoralSubsystemConstants.CoralTarget.kTargetX);
@@ -81,27 +82,35 @@ public class AlignToBranch extends Command {
     yController.setSetpoint(Constants.CoralSubsystemConstants.CoralTarget.kTargetY);
     yController.setTolerance(Constants.CoralSubsystemConstants.CoralTarget.kTargetYTol);
 
-    tagID = -1;
+    //tagID = -1;
+    //results = camera.getAllUnreadResults();
+    //tagID = target.getFidcialID();
   }
 
   @Override
   public void execute() { 
-    Transform3d target_pos = m_coral.getTargetPos(isRightScore); 
-    double tX = target_pos.getX();
-    double tY = target_pos.getY();
+    Transform3d target_pos = m_coral.getTargetPos(isRightScore);
     double path_x = target_pos.getX(); 
     double path_y = target_pos.getY();
+
+    double xSpeed = xController.calculate(path_x);
+    double ySpeed = yController.calculate(path_y);
     
-    boolean close = false;
-    if 
-    (
-    (Math.abs(tX - CoralTarget.kTargetX) < CoralTarget.kTargetXTol) || 
-    (Math.abs(tY - CoralTarget.kTargetY) < CoralTarget.kTargetYTol)
-    )
-    {
-      close = true;
+    SmartDashboard.putNumber("ALIGN/MoveX", xSpeed);
+    SmartDashboard.putNumber("ALIGN/MoveY", ySpeed);
+
+    System.out.println("XSPEED: " + xSpeed);
+    System.out.println("YSPEED" + ySpeed);
+
+  
+    m_drivetrain.drive(-xSpeed, -ySpeed, 0, false);
+
+    if (!yController.atSetpoint() || !xController.atSetpoint()) {
+      stopTimer.reset();  
     }
 
+
+ /*
      // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
@@ -115,11 +124,6 @@ public class AlignToBranch extends Command {
         List.of(new Translation2d(path_x/2,path_y/2)), new Pose2d(path_x, path_y, new Rotation2d(0)),
         config);
 
-   /*  if (LimelightHelpers.getTV("") && LimelightHelpers.getFiducialID("") == tagID) {
-        this.dontSeeTagTimer.reset();
-
-        double[] postions = LimelightHelpers.getBotPose_TargetSpace("");
-      */
       if(path_x < 2 && path_y < 2){ //was 10
         count ++;
         SmartDashboard.putNumber("Align/Camera/MoveX", path_x*100);
@@ -130,8 +134,8 @@ public class AlignToBranch extends Command {
         SmartDashboard.putNumber("Align/Camera/getX", tX*100);
         SmartDashboard.putNumber("Align/Camera/getY", tY*100);
 
-        double xSpeed = -xController.calculate(path_x);
-        double ySpeed = -yController.calculate(path_y);
+        //double xSpeed = -xController.calculate(path_x);
+        //double ySpeed = -yController.calculate(path_y);
 
         
         SmartDashboard.putNumber("Align/Camera/xSpeed",xSpeed);
@@ -166,14 +170,16 @@ public class AlignToBranch extends Command {
     }
 
     SmartDashboard.putNumber("poseValidTimer", stopTimer.get());
-  }
 
-  @Override
-  public void end(boolean interrupted) {
+
+*/
   }
 
   @Override
   public boolean isFinished() {
+    return this.dontSeeTagTimer.hasElapsed(0.5) || stopTimer.hasElapsed(1);
+
+/* 
     Transform3d target_pos = m_coral.getTargetPos(isRightScore); 
     double tX = target_pos.getX();
     double tY = target_pos.getY();
@@ -193,6 +199,6 @@ public class AlignToBranch extends Command {
         this.stopTimer.hasElapsed(2.0)) || this.idleTimer.hasElapsed(2.5);
 
         System.out.println("Align Command Done" + close);
-        return done;
+        return done; */
   }
 }

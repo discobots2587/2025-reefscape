@@ -41,8 +41,8 @@ public class RobotContainer {
   private final funnelSubsystem m_funnelSubsystem = new funnelSubsystem();
 
   //Auto Align Command
-  private final AlignToBranch m_AlignToRBranch = new AlignToBranch(m_robotDrive, m_coralSubSystem, false, 0);
-  private final AlignToBranch m_AlignToLBranch = new AlignToBranch(m_robotDrive, m_coralSubSystem, true, 0);
+  private final AlignToBranch m_AlignToRBranch = new AlignToBranch(m_robotDrive, m_coralSubSystem, false);
+  private final AlignToBranch m_AlignToLBranch = new AlignToBranch(m_robotDrive, m_coralSubSystem, true);
 
   
   //Controller Initialization
