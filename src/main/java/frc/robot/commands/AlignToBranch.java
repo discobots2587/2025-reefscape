@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.List;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -51,7 +52,7 @@ public class AlignToBranch extends Command {
     
 
   public AlignToBranch(DriveSubsystem m_drivetrain, CoralSubsystem coral, boolean is_right) {
-    double p_x = 5,p_y = 5, p_r = 2;
+    double p_x = 20,p_y = 20, p_r = 2;
     xController = new PIDController(p_x, 0.0, 0);  // Vertical movement
     yController = new PIDController(p_y, 0.0, 0);  // Horitontal movement
     rotController = new PIDController(p_r, 0, 0);  // Rotation
@@ -69,10 +70,10 @@ public class AlignToBranch extends Command {
     this.stopTimer.start();
     this.dontSeeTagTimer = new Timer();
     this.dontSeeTagTimer.start();
+    count = 0;
     /* 
     this.idleTimer = new Timer();
     this.idleTimer.start();
-    count = 0;
 */
 
     
@@ -93,22 +94,6 @@ public class AlignToBranch extends Command {
     double path_x = target_pos.getX(); 
     double path_y = target_pos.getY();
 
-    double xSpeed = xController.calculate(path_x);
-    double ySpeed = yController.calculate(path_y);
-    
-    SmartDashboard.putNumber("ALIGN/MoveX", xSpeed);
-    SmartDashboard.putNumber("ALIGN/MoveY", ySpeed);
-
-    System.out.println("XSPEED: " + xSpeed);
-    System.out.println("YSPEED" + ySpeed);
-
-  
-    m_drivetrain.drive(-xSpeed, -ySpeed, 0, false);
-
-    if (!yController.atSetpoint() || !xController.atSetpoint()) {
-      stopTimer.reset();  
-    }
-
 
  /*
      // Create config for trajectory
@@ -123,19 +108,33 @@ public class AlignToBranch extends Command {
         new Pose2d(0, 0, new Rotation2d(0)),
         List.of(new Translation2d(path_x/2,path_y/2)), new Pose2d(path_x, path_y, new Rotation2d(0)),
         config);
-
+*/
       if(path_x < 2 && path_y < 2){ //was 10
         count ++;
+
+        dontSeeTagTimer.reset();
+
+        double xSpeed = xController.calculate(path_x,Constants.CoralSubsystemConstants.CoralTarget.kTargetX);
+        double ySpeed = -yController.calculate(path_y,Constants.CoralSubsystemConstants.CoralTarget.kTargetY);
+        xSpeed = MathUtil.clamp(xSpeed, -1, 1);
+        ySpeed = MathUtil.clamp(ySpeed, -1, 1);
+
+        SmartDashboard.putNumber("ALIGN/MoveX", xSpeed);
+        SmartDashboard.putNumber("ALIGN/MoveY", ySpeed);
+    
+        System.out.println("XSPEED: " + xSpeed);
+        System.out.println("YSPEED" + ySpeed);
+
         SmartDashboard.putNumber("Align/Camera/MoveX", path_x*100);
         SmartDashboard.putNumber("Align/Camera/MoveY", path_y*100);
         SmartDashboard.putNumber("Align/Camera/Rotrot", 0.0);
         SmartDashboard.putNumber("Align/COUNT", count);
 
-        SmartDashboard.putNumber("Align/Camera/getX", tX*100);
-        SmartDashboard.putNumber("Align/Camera/getY", tY*100);
+        // SmartDashboard.putNumber("Align/Camera/getX", tX*100);
+        // SmartDashboard.putNumber("Align/Camera/getY", tY*100);
 
-        //double xSpeed = -xController.calculate(path_x);
-        //double ySpeed = -yController.calculate(path_y);
+     //   double xSpeed = xController.calculate(path_x);
+       // double ySpeed = -yController.calculate(path_y);
 
         
         SmartDashboard.putNumber("Align/Camera/xSpeed",xSpeed);
@@ -144,21 +143,7 @@ public class AlignToBranch extends Command {
         double rotValue = rotController.calculate(0.0);
         ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
         //drivebase.drive(new Translation2d(xSpeed, ySpeed), rotValue, false);
-        m_drivetrain.drive(-xSpeed, ySpeed, rotValue, true);
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_drivetrain::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
-        //thetaController.enableContinuousInput(-Math.PI, Math.PI);
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,       
-        m_drivetrain::setModuleStates,
-        m_drivetrain);
-
-        //DriveSubsystem.ChassisSpeeds(xSpeed , ySpeed , rotValue);
-        m_drivetrain.driveRobotRelative(new ChassisSpeeds(xSpeed , ySpeed , rotValue));
+        m_drivetrain.drive(xSpeed, ySpeed, rotValue, false);
 
         if (!yController.atSetpoint()||!xController.atSetpoint()) {
             stopTimer.reset();
@@ -171,15 +156,12 @@ public class AlignToBranch extends Command {
 
     SmartDashboard.putNumber("poseValidTimer", stopTimer.get());
 
-
-*/
   }
 
   @Override
   public boolean isFinished() {
-    return this.dontSeeTagTimer.hasElapsed(0.5) || stopTimer.hasElapsed(1);
+    //return this.dontSeeTagTimer.hasElapsed(0.5) || stopTimer.hasElapsed(1);
 
-/* 
     Transform3d target_pos = m_coral.getTargetPos(isRightScore); 
     double tX = target_pos.getX();
     double tY = target_pos.getY();
@@ -192,13 +174,15 @@ public class AlignToBranch extends Command {
     )
     {
       close = true;
+     // end(true);
     }
     SmartDashboard.putBoolean("AlignToBranch/Close", close);
     // Requires the robot to stay in the correct position for 0.3 seconds, as long as it gets a tag in the camera
-    boolean done = (this.dontSeeTagTimer.hasElapsed(0.5) || close ||        
-        this.stopTimer.hasElapsed(2.0)) || this.idleTimer.hasElapsed(2.5);
-
-        System.out.println("Align Command Done" + close);
-        return done; */
+    //boolean done = (this.dontSeeTagTimer.hasElapsed(2.0) || close ||        
+      //  this.stopTimer.hasElapsed(3.0));
+    if(!close && tX <2){
+      System.out.println("Align Command Done, CLOSE = " + close +" "+ tX + " " + tY);
+    }
+        return close;
   }
 }

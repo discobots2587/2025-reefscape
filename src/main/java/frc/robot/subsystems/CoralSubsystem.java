@@ -519,7 +519,7 @@ public class CoralSubsystem extends SubsystemBase {
     }
   }
   public Transform3d updateCameraPositions(PhotonCamera photonCamera) {
-    Transform3d  cameraToTarget = new Transform3d(0.,0.,0., new Rotation3d());
+    Transform3d  cameraToTarget = new Transform3d(100.,100.,0., new Rotation3d());
     var photoResults = photonCamera.getAllUnreadResults();
     var lastTagResult = photoResults.stream()
         .filter(result -> result.hasTargets())

@@ -83,6 +83,12 @@
           "data": {
             "pathName": "Copy of BlueCendadgterBarge-BlueReefG"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center2LowStation"
+          }
         }
       ]
     }

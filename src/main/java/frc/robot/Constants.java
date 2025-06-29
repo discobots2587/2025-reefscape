@@ -115,8 +115,8 @@ public final class Constants {
     public static final int FUNNEL_MOTOR_CURRENT_LIMIT = 10;
     public static final double FUNNEL_MOTOR_VOLTAGE_COMP = 12;
 //<<<<<<< HEAD
-    public static final double FUNNEL_SPEED_DOWN = -0.5;
-    public static final double FUNNEL_SPEED_UP = 0.05;
+    public static final double FUNNEL_SPEED_DOWN = -0.75;
+    public static final double FUNNEL_SPEED_UP = 0.015;
 //=======
 //>>>>>>> 1211b516d9701d13e2756645fe8730233dfc2863
 
@@ -133,9 +133,9 @@ public final class Constants {
     }
 
     public static final class ArmSetpoints {
-      public static final double kIntake = 0.24;
+      public static final double kIntake = 0.23; //was .24
       public static final double kArmDEAL = 0.48; //TODO:UNTESTED 
-      public static final double kFeederStation = 0.24;
+      public static final double kFeederStation = 0.23;  //was .24
       public static final double kLevel1 = 0.24;
       public static final double kLevel2 = 0.69; //Was 0.63
       public static final double kLevel3 = 0.72; //Was 0.69
