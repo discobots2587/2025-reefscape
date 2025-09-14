@@ -222,6 +222,9 @@ public class CoralSubsystem extends SubsystemBase {
       // prevent constant zeroing while pressed
       elevatorEncoder.setPosition(0);
       wasResetByLimit = true;
+      if (lastSetpoint == Setpoint.kIntake){
+        elevatorCurrentTarget = 0;
+      };
     } else if (!elevatorMotor.getReverseLimitSwitch().isPressed()) {
       wasResetByLimit = false;
     }
@@ -288,6 +291,20 @@ public class CoralSubsystem extends SubsystemBase {
           lastSetpoint = setpoint; // retain the last setpoint for scoring arm down
         });
   }
+
+
+public void liftDown(){
+  System.out.println("DOWN 10");
+  double newSetpoint = elevatorCurrentTarget-10;
+  elevatorCurrentTarget = newSetpoint;
+  elevatorClosedLoopController.setReference(
+        elevatorCurrentTarget, ControlType.kMAXMotionPositionControl);
+  zeroElevatorOnLimitSwitch();
+  //elevatorCurrentTarget = 0;
+  //setSetpointCommand(Setpoint.kIntake);
+}
+
+
   /* Scores the coral by moving arm down
    * This is a separate command because the arm needs to move down after the elevator has reached
    */
@@ -400,9 +417,9 @@ public class CoralSubsystem extends SubsystemBase {
 
   public void periodic() {
     if(Configs.CoralSubsystem.setpointMode) {
-    moveToSetpoint();
-    zeroElevatorOnLimitSwitch();
-    zeroOnUserButton();
+    moveToSetpoint(); //keeps it at setpoint
+    zeroElevatorOnLimitSwitch(); //checks if lfit zero via limit switch
+    zeroOnUserButton(); //rio button reset
     }
     // Display subsystem values
     SmartDashboard.putNumber("Coral/Arm/Target Position", armCurrentTarget);
@@ -533,6 +550,7 @@ public class CoralSubsystem extends SubsystemBase {
      //Set Z cameraPose = cameraPose.set;
       double yValue = cameraToTarget.getY();
       double xValue = cameraToTarget.getX();
+      cameraToTarget = new Transform3d(xValue = 0, yValue, 0, new Rotation3d());
       SmartDashboard.putNumber("Coral/camera/getY", yValue);
       SmartDashboard.putNumber("Coral/camera/getX", xValue);
       SmartDashboard.putNumber("Coral/camera/tag", tag.getFiducialId());

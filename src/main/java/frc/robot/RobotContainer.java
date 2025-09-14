@@ -161,13 +161,13 @@ m_pivotOutake.onTrue(m_algaeSubsystem.reverseIntakeCommand());
     //GOAL: Merge setpoitns into 1 button, selectable level through a selector in smartdashboard
     //Get to a point where we can access all 4 levels with 
     // A Button -> Elevator/Arm to level 2 position
-    m_liftA.onTrue(m_coralSubSystem.pickupCoralCommand());
 
     // X Button -> Elevator/Arm to level 3 position (BUTTON WE ARE USING THIS FOR SETPOINTS)
     m_liftX.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel3));
 
     // Y Button -> Elevator/Arm to level 4 position
     m_liftY.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel4));
+    m_liftA.onTrue(new InstantCommand(() -> m_coralSubSystem.liftDown()));
 
     resetCoral.onTrue (new InstantCommand(() -> m_coralSubSystem.resetCoral()));
     m_coralSubSystem.resetCoral();
