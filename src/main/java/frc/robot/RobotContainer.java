@@ -4,61 +4,27 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
-import edu.wpi.first.wpilibj.simulation.JoystickSim;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.Constants.AlgaeSubsystemConstant;
-import frc.robot.Constants.AlgaeSubsystemConstants;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.CoralSubsystemConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.ElevatorSubsystemconstant;
-import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.AlgaeSubsystemConstants.ArmSetpoints;
-import frc.robot.Constants.AlgaeSubsystemConstants.IntakeSetpoints;
-import frc.robot.subsystems.CoralSubsystem.Setpoint;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.funnelSubsystem;
-import frc.robot.subsystems.LEDSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import java.util.List;
-
-//<<<<<<< HEAD
-import javax.security.auth.login.FailedLoginException;
-//=======
-//>>>>>>> 1211b516d9701d13e2756645fe8730233dfc2863
-
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonUtils;
-
+import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import frc.robot.commands.scoreL3test;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.funnelSubsystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.AlignToBranch;
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -73,6 +39,11 @@ public class RobotContainer {
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private final funnelSubsystem m_funnelSubsystem = new funnelSubsystem();
+
+  //Auto Align Command
+  private final AlignToBranch m_AlignToRBranch = new AlignToBranch(m_robotDrive, m_coralSubSystem, true);
+  private final AlignToBranch m_AlignToLBranch = new AlignToBranch(m_robotDrive, m_coralSubSystem, false);
+
   
   //Controller Initialization
   XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
@@ -109,7 +80,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakecoral", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kFeederStation));
     NamedCommands.registerCommand("scoreCoral", m_coralSubSystem.scoreCoralCommand());
     NamedCommands.registerCommand("liftl4", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kLevel4));
-
+    NamedCommands.registerCommand("feedcoral", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kIntake));
+    NamedCommands.registerCommand("ClimberOut", m_climberSubsystem.autoClimberCommand());
 
     NamedCommands.registerCommand("liftl0", new InstantCommand(() -> System.out.println("lift level 0")));
     NamedCommands.registerCommand("armscore", new InstantCommand(() -> System.out.println("lower arm to reef")));
@@ -118,7 +90,6 @@ public class RobotContainer {
     // Auto chooser
     
     autoChooser = AutoBuilder.buildAutoChooser();
-
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -190,23 +161,27 @@ m_pivotOutake.onTrue(m_algaeSubsystem.reverseIntakeCommand());
     //GOAL: Merge setpoitns into 1 button, selectable level through a selector in smartdashboard
     //Get to a point where we can access all 4 levels with 
     // A Button -> Elevator/Arm to level 2 position
-    m_liftA.onTrue(m_coralSubSystem.pickupCoralCommand());
 
     // X Button -> Elevator/Arm to level 3 position (BUTTON WE ARE USING THIS FOR SETPOINTS)
     m_liftX.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel3));
 
     // Y Button -> Elevator/Arm to level 4 position
     m_liftY.onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel4));
+    m_liftA.onTrue(new InstantCommand(() -> m_coralSubSystem.liftDown()));
 
     resetCoral.onTrue (new InstantCommand(() -> m_coralSubSystem.resetCoral()));
     m_coralSubSystem.resetCoral();
 
     m_algaeScore.onTrue(m_algaeSubsystem.scoreAlgae());
 
+
+
     m_moveFunnel.whileTrue(new InstantCommand(() -> m_funnelSubsystem.runClimber(Constants.CoralSubsystemConstants.FUNNEL_SPEED_UP)));
-    m_moveFunnel.whileFalse(new InstantCommand(() -> m_funnelSubsystem.runClimber(0)));
+    m_moveFunnel.whileFalse(new InstantCommand(() -> m_funnelSubsystem.runClimber(.0015))); //was .015
+
+
     m_reverseFunnel.whileTrue(new InstantCommand(() -> m_funnelSubsystem.runClimber(Constants.CoralSubsystemConstants.FUNNEL_SPEED_DOWN)));
-    m_reverseFunnel.whileFalse(new InstantCommand(() -> m_funnelSubsystem.runClimber(0)));
+    m_reverseFunnel.whileFalse(new InstantCommand(() -> m_funnelSubsystem.runClimber(0.015)));
 
 
  //Driver trigger controls
@@ -240,6 +215,10 @@ CommandXboxController m_operatorController = new CommandXboxController(OIConstan
     m_driverController.pov(0).onFalse(new InstantCommand(() ->m_climberSubsystem.runClimber(0.0)));
     m_driverController.pov(180).whileTrue(new InstantCommand(() ->m_climberSubsystem.runClimber(Constants.ClimberConstants.CLIMBER_SPEED_DOWN)));
     m_driverController.pov(180).onFalse(new InstantCommand(() ->m_climberSubsystem.runClimber(0.0)));
+    
+    //Auto align testing
+    m_driverController.pov(90).whileTrue(m_AlignToRBranch);
+    m_driverController.pov(270).whileTrue(m_AlignToLBranch);
 
     //Operator Controller DPAD
      m_operatorController.pov(90).onTrue(m_coralSubSystem.scoreCoralCommand());
@@ -253,7 +232,7 @@ CommandXboxController m_operatorController = new CommandXboxController(OIConstan
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    /*   REMOVE  THIS COMMENT TO ENABLE TRAJECTORY AUTO (also remove lots of unused import statements)
+    /*    REMOVE  THIS COMMENT TO ENABLE TRAJECTORY AUTO (also remove lots of unused import statements)
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
@@ -291,7 +270,7 @@ CommandXboxController m_operatorController = new CommandXboxController(OIConstan
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+    //return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
     */
     return autoChooser.getSelected();  // use this line for Path Planner Selector
   }

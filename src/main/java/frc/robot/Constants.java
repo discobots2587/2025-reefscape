@@ -1,4 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
+  // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -115,8 +115,8 @@ public final class Constants {
     public static final int FUNNEL_MOTOR_CURRENT_LIMIT = 10;
     public static final double FUNNEL_MOTOR_VOLTAGE_COMP = 12;
 //<<<<<<< HEAD
-    public static final double FUNNEL_SPEED_DOWN = -0.05;
-    public static final double FUNNEL_SPEED_UP = 0.05;
+    public static final double FUNNEL_SPEED_DOWN = -0.75;
+    public static final double FUNNEL_SPEED_UP = 0.015;
 //=======
 //>>>>>>> 1211b516d9701d13e2756645fe8730233dfc2863
 
@@ -133,9 +133,9 @@ public final class Constants {
     }
 
     public static final class ArmSetpoints {
-      public static final double kIntake = 0.24;
+      public static final double kIntake = 0.23; //was .24
       public static final double kArmDEAL = 0.48; //TODO:UNTESTED 
-      public static final double kFeederStation = 0.24;
+      public static final double kFeederStation = 0.23;  //was .24
       public static final double kLevel1 = 0.24;
       public static final double kLevel2 = 0.69; //Was 0.63
       public static final double kLevel3 = 0.72; //Was 0.69
@@ -151,6 +151,13 @@ public final class Constants {
     public static final class IntakeSetpoints {
       public static final double kForward = 0.5;
       public static final double kReverse = -0.5;
+    }
+    public static final class CoralTarget {
+      public static final double kTargetX = 0.33; //was 0.024
+      public static final double kTargetY = 0.0;
+      public static final double kTargetYTol = 0.02; //Was 0.005
+      public static final double kTargetXTol = 0.02;
+
     }
   }
   public static final class AlgaeSubsystemConstants {
@@ -206,6 +213,6 @@ public final class Constants {
     public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 50;
     public static final double CLIMBER_MOTOR_VOLTAGE_COMP = 12;
     public static final double CLIMBER_SPEED_DOWN = -0.5;
-    public static final double CLIMBER_SPEED_UP = .5;
+    public static final double CLIMBER_SPEED_UP = 1;
   }
 }

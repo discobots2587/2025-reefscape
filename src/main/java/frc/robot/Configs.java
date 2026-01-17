@@ -1,7 +1,8 @@
 package frc.robot;
 
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+// import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
@@ -78,7 +79,7 @@ public final class Configs {
           // Set PID values for position control
           .p(0.1)
           .d(0.1)
-          .outputRange(-.15, +.15)
+          .outputRange(-.2, +.3)
           .positionWrappingEnabled(true)
           .maxMotion
           // Set MAXMotion parameters for position control
@@ -118,11 +119,11 @@ public final class Configs {
           .p(0.2)
           //.i(0.01)
           .d(0.65)
-          .outputRange(-.95, .95)
+          .outputRange(-.99, .99)
           .maxMotion
           // Set MAXMotion parameters for position control
-          .maxVelocity(2000)
-          .maxAcceleration(1500)
+          .maxVelocity(4000) //was 3000
+          .maxAcceleration(3000) //was 2250
           .allowedClosedLoopError(0.05);
       } else {
         elevatorConfig
@@ -153,7 +154,8 @@ public final class Configs {
           // Set PID values for position control. We don't need to pass a closed
           // loop slot, as it will default to slot 0.
           .p(0.1)
-          .outputRange(-.15, 0.25);
+          .d(.05)
+          .outputRange(-.15, 0.2);
         
       // Configure basic settings of the intake motor
       intakeConfig.inverted(true).idleMode(IdleMode.kBrake).smartCurrentLimit(20);

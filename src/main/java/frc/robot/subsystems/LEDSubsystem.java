@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
@@ -41,13 +42,13 @@ public class LEDSubsystem extends SubsystemBase {
         applyPattern(LEDPattern.solid(Color.kBlue));
       }
       else if (mode == 1){
-        applyPattern(LEDPattern.solid(Color.kGreen));
+        applyPattern(LEDPattern.solid(Color.kPurple));
       } 
       else if (mode == 2){
-        applyPattern(LEDPattern.solid(Color.kWhite));
+        applyPattern(LEDPattern.solid(Color.kRed));
       } 
       else if (mode == 3){
-        applyPattern(LEDPattern.solid(Color.kYellow));
+        applyPattern(LEDPattern.solid(Color.kHotPink));
       } 
     }
     

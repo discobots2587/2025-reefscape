@@ -48,7 +48,9 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 import java.util.Set;
 import java.util.stream.Stream;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import frc.robot.subsystems.LEDSubsystem;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 
 public class CoralSubsystem extends SubsystemBase {
@@ -149,12 +151,14 @@ public class CoralSubsystem extends SubsystemBase {
               "Arm",
               SimulationRobotConstants.kArmLength * SimulationRobotConstants.kPixelsPerMeter,
               180 - Units.radiansToDegrees(SimulationRobotConstants.kMinAngleRads) - 90));
+              
   public final  PhotonCamera cameraL = new PhotonCamera("FrontL");
   public final  PhotonCamera cameraR = new PhotonCamera("FrontR");
     // PWM port 9
   // Must be a PWM header, not MXP or DIO
 
   public final LEDSubsystem m_led = new LEDSubsystem(); 
+  private DigitalInput m_CoralSensor = new DigitalInput(9);
 
 
 
@@ -218,6 +222,9 @@ public class CoralSubsystem extends SubsystemBase {
       // prevent constant zeroing while pressed
       elevatorEncoder.setPosition(0);
       wasResetByLimit = true;
+      if (lastSetpoint == Setpoint.kIntake){
+        elevatorCurrentTarget = 0;
+      };
     } else if (!elevatorMotor.getReverseLimitSwitch().isPressed()) {
       wasResetByLimit = false;
     }
@@ -284,10 +291,40 @@ public class CoralSubsystem extends SubsystemBase {
           lastSetpoint = setpoint; // retain the last setpoint for scoring arm down
         });
   }
+
+
+public void liftDown(){
+  System.out.println("DOWN 10");
+  double newSetpoint = elevatorCurrentTarget-10;
+  elevatorCurrentTarget = newSetpoint;
+  elevatorClosedLoopController.setReference(
+        elevatorCurrentTarget, ControlType.kMAXMotionPositionControl);
+  zeroElevatorOnLimitSwitch();
+  //elevatorCurrentTarget = 0;
+  //setSetpointCommand(Setpoint.kIntake);
+}
+
+
   /* Scores the coral by moving arm down
    * This is a separate command because the arm needs to move down after the elevator has reached
    */
   public Command scoreCoralCommand(){
+    // echo camera values
+    Transform3d rpos = updateCameraPositions(cameraL);
+    if (rpos.getX() < 10){
+    System.out.println(" Right Target");
+    System.out.println(rpos.getX()*100.);
+    System.out.println(rpos.getY()*100.);
+
+    }
+    Transform3d lpos = updateCameraPositions(cameraR);
+    if (lpos.getX() < 10){
+    System.out.println(" Left Target");
+    System.out.println(lpos.getX()*100);
+    System.out.println(lpos.getY()*100);
+
+    }
+      
     return this.runOnce(
       () -> {
         double arm_delta = .22;
@@ -315,6 +352,7 @@ public class CoralSubsystem extends SubsystemBase {
             break;
         }
       });
+
   }
 
   //This Command will allow the operator to pickup coral with one button
@@ -379,9 +417,9 @@ public class CoralSubsystem extends SubsystemBase {
 
   public void periodic() {
     if(Configs.CoralSubsystem.setpointMode) {
-    moveToSetpoint();
-    zeroElevatorOnLimitSwitch();
-    zeroOnUserButton();
+    moveToSetpoint(); //keeps it at setpoint
+    zeroElevatorOnLimitSwitch(); //checks if lfit zero via limit switch
+    zeroOnUserButton(); //rio button reset
     }
     // Display subsystem values
     SmartDashboard.putNumber("Coral/Arm/Target Position", armCurrentTarget);
@@ -397,6 +435,8 @@ public class CoralSubsystem extends SubsystemBase {
     } else {
       SmartDashboard.putNumber("Coral/Elevator/Down", 0);
     }
+    boolean have_coral = m_CoralSensor.get();
+    SmartDashboard.putBoolean ("Coral/Intake/HaveCoral", have_coral);
     // return camera positions
     Transform3d cameraLeft = updateCameraPositions(cameraL);
     SmartDashboard.putNumber("Coral/cameraL/getY", cameraLeft.getY());
@@ -404,22 +444,26 @@ public class CoralSubsystem extends SubsystemBase {
   
     
     Transform3d cameraRight = updateCameraPositions(cameraR);
-
-    
     SmartDashboard.putNumber("Coral/cameraR/getY", cameraRight.getY());
     SmartDashboard.putNumber("Coral/cameraR/getX", cameraRight.getX());
+    
+    
     boolean scoreR = false , scoreL = false;
-    if (cameraLeft.getY() > -.09 && cameraLeft.getY() < -.02) {
+    if (cameraLeft.getY() > -.03 && cameraLeft.getY() < .03) {
       scoreR = true;
-    }
-    if (cameraRight.getY() < .09 && cameraRight.getY() > .02) {
+      scoreL = false;
+    } else if (cameraRight.getY() < .03 && cameraRight.getY() > -.03) {
       scoreL = true;
+      scoreR = false;
+    } else {
+      scoreL = false;
+      scoreR = false;
     }
     if (scoreR) {
       m_led.setStatus(LEDModes.kAlignR);
-    } else if (scoreR) {
+    } else if (scoreL) {
       m_led.setStatus(LEDModes.kAlignL);
-    } else if (elevatorEncoder.getPosition()> ArmSetpoints. kFeederStation){
+    } else if (elevatorEncoder.getPosition()< ArmSetpoints. kFeederStation){
       m_led.setStatus(LEDModes.kFeeder);
     } else {
       m_led.setStatus(LEDModes.kNone);
@@ -483,8 +527,16 @@ public class CoralSubsystem extends SubsystemBase {
         0.02);
     // SimBattery is updated in Robot.java
   }
+  public Transform3d getTargetPos (boolean is_right) {
+    if (is_right){
+      return updateCameraPositions(cameraL);
+    }
+    else {
+      return updateCameraPositions(cameraR);
+    }
+  }
   public Transform3d updateCameraPositions(PhotonCamera photonCamera) {
-    Transform3d  cameraToTarget = new Transform3d();
+    Transform3d  cameraToTarget = new Transform3d(100.,100.,0., new Rotation3d());
     var photoResults = photonCamera.getAllUnreadResults();
     var lastTagResult = photoResults.stream()
         .filter(result -> result.hasTargets())
@@ -498,10 +550,14 @@ public class CoralSubsystem extends SubsystemBase {
      //Set Z cameraPose = cameraPose.set;
       double yValue = cameraToTarget.getY();
       double xValue = cameraToTarget.getX();
+      cameraToTarget = new Transform3d(xValue = 0, yValue, 0, new Rotation3d());
       SmartDashboard.putNumber("Coral/camera/getY", yValue);
       SmartDashboard.putNumber("Coral/camera/getX", xValue);
       SmartDashboard.putNumber("Coral/camera/tag", tag.getFiducialId());
     }
     return cameraToTarget;
+  }
+  public boolean haveCoral(){
+    return m_CoralSensor.get();
   }
 }
