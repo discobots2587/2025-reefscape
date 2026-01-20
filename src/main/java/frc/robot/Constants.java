@@ -4,10 +4,21 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.AprilTagPhotonCamera.PhotonCameraConstants;
+
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
+import edu.wpi.first.math.Matrix;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -215,4 +226,42 @@ public final class Constants {
     public static final double CLIMBER_SPEED_DOWN = -0.5;
     public static final double CLIMBER_SPEED_UP = 1;
   }
+
+  public static final class Vision {
+        public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, Double.MAX_VALUE);
+        public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.1, 0.1, Double.MAX_VALUE);
+        public static final Matrix<N3, N1> MULTI_TAG_TELEOP_STD_DEVS = VecBuilder.fill(0.01, 0.01, Double.MAX_VALUE);
+        // TODO
+        public static final Matrix<N3, N1> SINGLE_TAG_PRECISE_STD_DEVS = VecBuilder.fill(0.05, 0.05, Double.MAX_VALUE);
+
+        public static final PhotonCameraConstants CAMERA_CONSTANTS = new PhotonCameraConstants();
+        static {
+            CAMERA_CONSTANTS.WIDTH = 1600;
+            CAMERA_CONSTANTS.HEIGHT = 1304;
+            CAMERA_CONSTANTS.FOV = 95.39;
+            CAMERA_CONSTANTS.FPS = 35;
+            CAMERA_CONSTANTS.AVG_LATENCY = 30;
+            CAMERA_CONSTANTS.STDDEV_LATENCY = 15;
+        }
+// modify for lamar 2025 config
+        public static final Transform3d[] ROBOT_TO_CAMS = new Transform3d[] {
+                // left camera
+                new Transform3d(
+                        new Translation3d(
+                                Inches.of(-6.0).in(Meters),
+                                Inches.of(9.0).in(Meters),
+                                Inches.of(12.5).in(Meters)),
+                        new Rotation3d(0, Units.degreesToRadians(0),
+                                Units.degreesToRadians(0))),
+                // right camera
+                new Transform3d(
+                        new Translation3d(
+                                Inches.of(6.0).in(Meters),
+                                Inches.of(9.0).in(Meters),
+                                Inches.of(12.5).in(Meters)),
+                        new Rotation3d(0, Units.degreesToRadians(0),
+                                Units.degreesToRadians(0))),
+        };
+    }
+
 }

@@ -40,6 +40,7 @@ import frc.robot.Constants.CoralSubsystemConstants.ElevatorSetpoints;
 import frc.robot.Constants.CoralSubsystemConstants.IntakeSetpoints;
 import frc.robot.Constants.CoralSubsystemConstants.LEDModes;
 import frc.robot.Constants.SimulationRobotConstants;
+import frc.robot.Constants.Vision;
 import frc.robot.Constants.ElevatorSubsystemconstant;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
@@ -51,6 +52,9 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import frc.robot.subsystems.LEDSubsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
+//import static frc.robot.Constants.Vision;
+//import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.PositionTracker;
 
 
 public class CoralSubsystem extends SubsystemBase {
@@ -105,6 +109,8 @@ public class CoralSubsystem extends SubsystemBase {
   // Simulation setup and variables
   private DCMotor elevatorMotorModel = DCMotor.getNEO(1);
   private SparkMaxSim elevatorMotorSim;
+  private Vision vision = new Vision();
+  private PositionTracker positionTracker = new PositionTracker();
   private SparkLimitSwitchSim elevatorLimitSwitchSim;
   private final ElevatorSim m_elevatorSim =
       new ElevatorSim(
