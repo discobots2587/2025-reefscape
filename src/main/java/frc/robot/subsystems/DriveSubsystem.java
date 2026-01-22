@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.estimator.PoseEstimator;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -14,13 +16,19 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.Matrix;
+import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -53,6 +61,30 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The gyro sensor
   private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI);
+  // Odometry class for tracking robot pose -- for RustHounds Vision
+//  private final SwerveDrivePoseEstimator poseEstimator;
+ // private final SwerveDrivePoseEstimator precisePoseEstimator;
+  private SwerveDriveOdometry simOdometry;
+  private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
+                DriveConstants.kDriveKinematics,
+                Rotation2d.fromDegrees(-m_gyro.getAngle()),
+                new SwerveModulePosition[] {
+                    m_frontLeft.getPosition(),
+                    m_frontRight.getPosition(),
+                    m_rearLeft.getPosition(),
+                    m_rearRight.getPosition()
+                },
+                new Pose2d(0, 0, Rotation2d.kZero));
+  private final SwerveDrivePoseEstimator precisePoseEstimator = new SwerveDrivePoseEstimator(
+                DriveConstants.kDriveKinematics,
+                Rotation2d.fromDegrees(-m_gyro.getAngle()),
+                new SwerveModulePosition[] {
+                    m_frontLeft.getPosition(),
+                    m_frontRight.getPosition(),
+                    m_rearLeft.getPosition(),
+                    m_rearRight.getPosition()
+                },
+                new Pose2d(0, 0, Rotation2d.kZero));
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -104,19 +136,37 @@ public class DriveSubsystem extends SubsystemBase {
         // Handle exception as needed
         e.printStackTrace();
       }
+
+      
   }
 
   @Override
   public void periodic() {
-    // Update the odometry in the periodic block
-    m_odometry.update(
-        Rotation2d.fromDegrees(-m_gyro.getAngle()),
-        new SwerveModulePosition[] {
+    SwerveModulePosition[] modulePositions = new SwerveModulePosition[]{
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
-        });
+        };
+    double yawDegrees= -m_gyro.getAngle();
+
+    /* Now update odometry */
+                    /* Keep track of the change in azimuth rotations */
+                    /* 
+
+                    //double yawDegrees = BaseStatusSignal.getLatencyCompensatedValue(
+                    //        pigeon.getYaw(), pigeon.getAngularVelocityZWorld()).magnitude();
+
+    /* Keep track of previous and current pose to account for the carpet vector */
+    poseEstimator.update(Rotation2d.fromDegrees(yawDegrees), modulePositions);
+    precisePoseEstimator.update(Rotation2d.fromDegrees(yawDegrees),
+                            modulePositions);
+    if (RobotBase.isSimulation()) {
+              simOdometry.update(Rotation2d.fromDegrees(yawDegrees), modulePositions);
+    } 
+    // Update the odometry in the periodic block
+    m_odometry.update(
+        Rotation2d.fromDegrees(-m_gyro.getAngle()), modulePositions);
     SmartDashboard.putNumber("Gyro Angle", -m_gyro.getAngle());
   }
   public SwerveModuleState[] getModuleStates() {
@@ -246,4 +296,54 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
+
+  public Pose2d getSimPose() {
+    if (simOdometry != null)
+        return simOdometry.getPoseMeters();
+     else
+            return new Pose2d();
+  }
+  public SwerveModulePosition[] getModulePositions() {
+        return new SwerveModulePosition[] {
+                m_frontLeft.getPosition(),
+                m_frontRight.getPosition(),
+                m_rearLeft.getPosition(),
+                m_rearRight.getPosition()
+        };
+  }
+    /**
+   * Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from -180 to 180
+   */
+  public Rotation2d getRotation() {
+    return Rotation2d.fromDegrees(-m_gyro.getAngle());
+  }
+//@Override
+  public SwerveDrivePoseEstimator getPoseEstimator() {
+        return poseEstimator;
+  }
+   /**
+   * Adds a precise vision measurement to the pose estimator. Used by the vision
+   * subsystem.
+   * 
+   * @param visionRobotPoseMeters    the estimated robot pose from vision
+   * @param timestampSeconds         the timestamp of the vision measurement
+   * @param visionMeasurementStdDevs the standard deviations of the measurement
+   */
+  public void addPreciseVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds,
+            Matrix<N3, N1> visionMeasurementStdDevs) {
+
+            precisePoseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds,
+                    visionMeasurementStdDevs);
+
+  }
+  public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds,
+            Matrix<N3, N1> visionMeasurementStdDevs) {
+
+            poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds,
+                    visionMeasurementStdDevs);
+
+  }
+
 }

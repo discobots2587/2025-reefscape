@@ -25,16 +25,24 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.funnelSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.AlignToBranch;
+
+import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.PositionTracker;
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
  * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
  * (including subsystems, commands, and button mappings) should be declared here.
  */
+
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
- // private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem(ElevatorSubsystemconstant.ElevatorSubsystemCanId);
+  PositionTracker positionTracker = new PositionTracker();
+  Vision vision = new Vision();
+ 
+  // private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem(ElevatorSubsystemconstant.ElevatorSubsystemCanId);
   private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();   
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
@@ -74,6 +82,12 @@ public class RobotContainer {
         // Build an auto chooser. This will use Commands.none() as the default option.
     //
     
+    vision.setSimPoseSupplier(m_robotDrive::getSimPose);  
+    vision.setPoseEstimator(m_robotDrive.getPoseEstimator());
+    vision.setChassisSpeedsSupplier(m_robotDrive::getSpeeds);  // was getChassisSpeeds
+    vision.setHeadingSupplier(m_robotDrive::getRotation);
+    vision.setVisionMeasurementConsumer(m_robotDrive::addVisionMeasurement);
+    vision.setPreciseVisionMeasurementConsumer(m_robotDrive::addPreciseVisionMeasurement);
 
     // Register Named Commands
     NamedCommands.registerCommand("liftL3", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kLevel3));
@@ -273,5 +287,11 @@ CommandXboxController m_operatorController = new CommandXboxController(OIConstan
     //return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
     */
     return autoChooser.getSelected();  // use this line for Path Planner Selector
+
+
+   
+    
   }
+
+  
 }
