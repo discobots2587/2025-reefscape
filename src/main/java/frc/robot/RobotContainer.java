@@ -37,14 +37,12 @@ import frc.robot.subsystems.PositionTracker;
  */
 
 public class RobotContainer {
-   // PositionTracker positionTracker = new PositionTracker();
-  //  Vision vision = new Vision();
-
-
-
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
- // private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem(ElevatorSubsystemconstant.ElevatorSubsystemCanId);
+  PositionTracker positionTracker = new PositionTracker();
+  Vision vision = new Vision();
+ 
+  // private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem(ElevatorSubsystemconstant.ElevatorSubsystemCanId);
   private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();   
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
@@ -84,6 +82,12 @@ public class RobotContainer {
         // Build an auto chooser. This will use Commands.none() as the default option.
     //
     
+    vision.setSimPoseSupplier(m_robotDrive::getSimPose);  
+    vision.setPoseEstimator(m_robotDrive.getPoseEstimator());
+    vision.setChassisSpeedsSupplier(m_robotDrive::getSpeeds);  // was getChassisSpeeds
+    vision.setHeadingSupplier(m_robotDrive::getRotation);
+    vision.setVisionMeasurementConsumer(m_robotDrive::addVisionMeasurement);
+    vision.setPreciseVisionMeasurementConsumer(m_robotDrive::addPreciseVisionMeasurement);
 
     // Register Named Commands
     NamedCommands.registerCommand("liftL3", m_coralSubSystem.setSetpointCommand(CoralSubsystem.Setpoint.kLevel3));
@@ -288,12 +292,6 @@ CommandXboxController m_operatorController = new CommandXboxController(OIConstan
    
     
   }
-   // vision.setSimPoseSupplier(m_robotDrive::getSimPose);  
-    // vision.setPoseEstimator(m_robotDrive.getPoseEstimator());
-    // vision.setChassisSpeedsSupplier(m_robotDrive::getChassisSpeeds);
-    // vision.setHeadingSupplier(m_robotDrive::getRotation);
-    // vision.setVisionMeasurementConsumer(m_robotDrive::addVisionMeasurement);
-    // vision.setPreciseVisionMeasurementConsumer(m_robotDrive::addPreciseVisionMeasurement);
 
   
 }
