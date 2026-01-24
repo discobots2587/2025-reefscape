@@ -36,6 +36,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.Vision.*;
 
@@ -161,6 +162,8 @@ public class Vision extends SubsystemBase {
                 if (normSpeed < 0.8 || !DriverStation.isAutonomous()) {
                     visionMeasurementConsumer.accept(pose, estPose.timestampSeconds, stddevs);
                 }
+            SmartDashboard.putNumber("vision/m_field/getX", pose.getX());
+            SmartDashboard.putNumber("vision/m_field/getY", pose.getY());
             }
 
             for (EstimatedRobotPose trigPose : trigPoses) {
