@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -85,6 +86,9 @@ public class DriveSubsystem extends SubsystemBase {
                     m_rearRight.getPosition()
                 },
                 new Pose2d(0, 0, Rotation2d.kZero));
+  // Create the Field2d object to track position on Shuffleboard
+  private final Field2d m_field = new Field2d();
+                
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -99,6 +103,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    // 2. Publish the Field object to SmartDashboard/Shuffleboard
+    SmartDashboard.putData("Field", m_field);
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
     // Load the RobotConfig from the GUI settings. You should probably
@@ -168,6 +174,12 @@ public class DriveSubsystem extends SubsystemBase {
     m_odometry.update(
         Rotation2d.fromDegrees(-m_gyro.getAngle()), modulePositions);
     SmartDashboard.putNumber("Gyro Angle", -m_gyro.getAngle());
+    // Update the field object
+    Pose2d cPose = getPose();
+    m_field.setRobotPose(getPose());
+    SmartDashboard.putData("Field", m_field);
+    SmartDashboard.putNumber("DriveSub/m_field/getX", cPose.getX());
+    SmartDashboard.putNumber("DriveSub/m_field/getY", cPose.getY());
   }
   public SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
@@ -185,7 +197,10 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    //old return m_odometry.getPoseMeters(); // WPILib Odometry
+
+    return poseEstimator.getEstimatedPosition(); // RustHounds Vision
+
   }
 
   /**
@@ -194,6 +209,12 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose The pose to which to set the odometry.
    */
   public void resetOdometry(Pose2d pose) {
+    SwerveModulePosition[] modulePositions = new SwerveModulePosition[]{
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+    };
     m_odometry.resetPosition(
         Rotation2d.fromDegrees(-m_gyro.getAngle()),
         new SwerveModulePosition[] {
@@ -203,6 +224,20 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         },
         pose);
+    poseEstimator.resetPosition(
+        Rotation2d.fromDegrees(-m_gyro.getAngle()),
+        modulePositions,
+        pose);
+    precisePoseEstimator.resetPosition(
+        Rotation2d.fromDegrees(-m_gyro.getAngle()),
+        modulePositions,
+        pose);
+        if(RobotBase.isSimulation()){
+          simOdometry.resetPosition(
+            Rotation2d.fromDegrees(-m_gyro.getAngle()),
+            modulePositions,
+            pose);
+        } 
   }
   
   public ChassisSpeeds getSpeeds() {
@@ -301,8 +336,9 @@ public class DriveSubsystem extends SubsystemBase {
     if (simOdometry != null)
         return simOdometry.getPoseMeters();
      else
-            return new Pose2d();
+        return new Pose2d();
   }
+
   public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
                 m_frontLeft.getPosition(),
