@@ -197,7 +197,10 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    //old return m_odometry.getPoseMeters(); // WPILib Odometry
+
+    return poseEstimator.getEstimatedPosition(); // RustHounds Vision
+
   }
 
   /**
@@ -206,6 +209,12 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose The pose to which to set the odometry.
    */
   public void resetOdometry(Pose2d pose) {
+    SwerveModulePosition[] modulePositions = new SwerveModulePosition[]{
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+    };
     m_odometry.resetPosition(
         Rotation2d.fromDegrees(-m_gyro.getAngle()),
         new SwerveModulePosition[] {
@@ -215,6 +224,20 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         },
         pose);
+    poseEstimator.resetPosition(
+        Rotation2d.fromDegrees(-m_gyro.getAngle()),
+        modulePositions,
+        pose);
+    precisePoseEstimator.resetPosition(
+        Rotation2d.fromDegrees(-m_gyro.getAngle()),
+        modulePositions,
+        pose);
+        if(RobotBase.isSimulation()){
+          simOdometry.resetPosition(
+            Rotation2d.fromDegrees(-m_gyro.getAngle()),
+            modulePositions,
+            pose);
+        } 
   }
   
   public ChassisSpeeds getSpeeds() {
@@ -313,8 +336,9 @@ public class DriveSubsystem extends SubsystemBase {
     if (simOdometry != null)
         return simOdometry.getPoseMeters();
      else
-            return new Pose2d();
+        return new Pose2d();
   }
+
   public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
                 m_frontLeft.getPosition(),

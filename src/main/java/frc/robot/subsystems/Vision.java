@@ -83,13 +83,14 @@ public class Vision extends SubsystemBase {
     private final Pose3d[] latestUsedTrigPoses = new Pose3d[] { Pose3d.kZero, Pose3d.kZero };
 
     public Vision() {
-        try {
-            tagLayout = new AprilTagFieldLayout((RobotBase.isReal() ? "/home/lvuser/deploy/" : "src/main/deploy/")
-                    + "2026-rebuilt-welded-blue.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-            tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
-        }
+        tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
+        // try {
+        //     // tagLayout = new AprilTagFieldLayout((RobotBase.isReal() ? "/home/lvuser/deploy/" : "src/main/deploy/")
+        //     //         + "2026-rebuilt-welded-blue.json");
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        //     tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+        // }
 
         houndeye01 = new AprilTagPhotonCamera("FrontL",
                 ROBOT_TO_CAMS[0], CAMERA_CONSTANTS, 0.2, 0.1, tagLayout);
@@ -120,7 +121,7 @@ public class Vision extends SubsystemBase {
      */
     @Override
     public void simulationPeriodic() {
-        // visionSim.update(simPoseSupplier.get());
+        visionSim.update(simPoseSupplier.get());
     }
 
     /**
