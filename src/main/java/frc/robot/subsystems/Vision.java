@@ -113,7 +113,6 @@ public class Vision extends SubsystemBase {
     @Override
     public void periodic() {
         updateVisionEstimates();
-        // System.out.println(cameraPoses());
     }
 
     /**
@@ -156,7 +155,7 @@ public class Vision extends SubsystemBase {
 
                 latestUsedPoses[i] = estPose.estimatedPose;
                 Pose2d pose = estPose.estimatedPose.toPose2d();
-                System.out.println(pose); //over here
+              //  System.out.println(pose); //over here
 
                 double normSpeed = new Translation2d(chassisSpeedsSupplier.get().vxMetersPerSecond,
                         chassisSpeedsSupplier.get().vyMetersPerSecond).getNorm();
