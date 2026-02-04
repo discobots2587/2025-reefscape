@@ -46,6 +46,8 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import static java.util.stream.Collectors.toUnmodifiableSet;
+
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -534,6 +536,7 @@ public void liftDown(){
     // SimBattery is updated in Robot.java
   }
   public Transform3d getTargetPos (boolean is_right) {
+    SmartDashboard.putBoolean("Coral/camera/getis_right", is_right);
     if (is_right){
       return updateCameraPositions(cameraL);
     }
@@ -543,24 +546,30 @@ public void liftDown(){
   }
   public Transform3d updateCameraPositions(PhotonCamera photonCamera) {
     Transform3d  cameraToTarget = new Transform3d(100.,100.,0., new Rotation3d());
-    var photoResults = photonCamera.getAllUnreadResults();
-    var lastTagResult = photoResults.stream()
+    var photonResults = List.of(photonCamera.getLatestResult());
+    var lastTagResult = photonResults.stream()
         .filter(result -> result.hasTargets())
         .flatMap(result -> result.getTargets().stream())
         .filter(target -> FIDUCIAL_IDS.contains(target.getFiducialId()))
         .findFirst();
-
+    boolean tag_found = false;
     if (lastTagResult.isPresent()) {
+      tag_found = true;
       PhotonTrackedTarget tag = lastTagResult.get();
       cameraToTarget = tag.bestCameraToTarget;
      //Set Z cameraPose = cameraPose.set;
       double yValue = cameraToTarget.getY();
       double xValue = cameraToTarget.getX();
-      cameraToTarget = new Transform3d(xValue = 0, yValue, 0, new Rotation3d());
+      
       SmartDashboard.putNumber("Coral/camera/getY", yValue);
       SmartDashboard.putNumber("Coral/camera/getX", xValue);
       SmartDashboard.putNumber("Coral/camera/tag", tag.getFiducialId());
+
     }
+    SmartDashboard.putBoolean ("Coral/UpdateCameraPositions/found", tag_found);
+    SmartDashboard.putNumber("Coral/UpdateCameraPositions/getX", cameraToTarget.getX());
+    SmartDashboard.putNumber("Coral/UpdateCameraPositions/getY", cameraToTarget.getY());
+
     return cameraToTarget;
   }
   public boolean haveCoral(){
